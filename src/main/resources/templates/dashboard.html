@@ -16,23 +16,6 @@
             <h1>Welcome to Stack Overflow, [User's Name]!</h1>
             <p>Find answers to your technical questions and help others answer theirs.</p>
         </div>
-
-
-<!--        <div>-->
-<!--            <h1>Welcome to the Dashboard</h1>-->
-
-<!--            <div th:if="${user != null}">-->
-<!--                <p>Hello, <span th:text="${user.username}">User</span>!</p>-->
-<!--                <p>Your email: <span th:text="${user.email}"></span></p>-->
-<!--            </div>-->
-
-<!--            <div th:if="${user == null}">-->
-<!--                <p>Welcome, guest! Please <a th:href="@{/users/login}">log in</a> or <a th:href="@{/users/register}">register</a> to access personalized features.</p>-->
-<!--            </div>-->
-<!--        </div>-->
-
-
-
         <section class="posts">
             <h2>Interesting Questions for you</h2>
             <div class="post" th:each="question:${questions}">

@@ -34,6 +34,13 @@ public class QuestionController {
         this.modelMapper=modelMapper;
     }
 
+    @GetMapping("/questionsdashboard")
+    public String questionDashboard(Model model){
+        List<Question> questionList=questionService.getAllQuestions();
+        model.addAttribute("questions",questionList);
+        return "question/QuestionDashboard";
+    }
+
     @GetMapping("/home")
     public String homePage(Model model){
         List<Question> questionList=questionService.getAllQuestions();
@@ -128,4 +135,6 @@ public class QuestionController {
         questionService.deleteQuestion(id);
         return "redirect:/questions/home";
     }
+
+
 }

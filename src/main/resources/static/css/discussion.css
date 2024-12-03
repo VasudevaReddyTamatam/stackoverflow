@@ -1,0 +1,179 @@
+ body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #daeff5;
+      color: rgb(24, 22, 22);
+    }
+     header nav a {
+          margin-right: 20px;
+          text-decoration: none;
+          color: white;
+        }
+
+        header .search-bar {
+          padding: 5px;
+          border-radius: 3px;
+          border: none;
+          width: 100%; /* Default to full width of its container */
+          max-width: 700px; /* Cap the maximum width for larger screens */
+          min-width: 250px; /* Ensure it doesn’t shrink too much on smaller screens */
+          box-sizing: border-box;
+
+        }
+
+        header .icons span {
+          margin: 0 10px;
+          font-size: 1.2em;
+        }
+
+        .container {
+          display: flex;
+        }
+
+        aside {
+          width: 200px;
+          padding: 20px;
+          background-color: #ffffff;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        aside ul {
+          list-style: none;
+          padding: 0;
+        }
+
+        aside ul li {
+          margin-bottom: 10px;
+        }
+
+        aside ul li.section-title {
+          margin-top: 20px;
+          font-weight: bold;
+        }
+
+        aside ul li a {
+          text-decoration: none;
+          color: #0074cc;
+        }
+
+        main {
+          flex: 1;
+          padding: 20px;
+
+        }
+
+        main .cards {
+          display: flex;
+          gap: 20px;
+          margin-bottom: 20px;
+        }
+
+        .text-content {
+          max-width: 70%;
+        }
+
+        .main-button {
+          background-color: #b2dfec;
+          color: rgb(26, 24, 24);
+          padding: 10px 20px;
+          font-size: 16px;
+          text-align: left;
+          font-weight: bold;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+        }
+
+        main .card {
+          background: white;
+          padding: 20px;
+          border-radius: 5px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style for select dropdowns */
+        main select {
+          background-color: #e1ecf4; /* Light blue background */
+          border: 1px solid #121313; /* Blue border */
+          border-radius: 5px; /* Rounded corners */
+          margin-bottom: 10px;
+          padding: 5px 10px; /* Inner padding */
+          margin-right: 10px; /* Spacing between selects */
+          font-size: 15px; /* Adjust font size */
+          cursor: pointer; /* Pointer cursor on hover */
+          width: 80px;
+          text-align: center;
+        }
+
+
+        /* Style for option elements */
+        main select option {
+          background-color: #fff; /* White background for dropdown options */
+          color: #333; /* Text color */
+          padding: 5px; /* Padding inside each option */
+          font-size: 14px; /* Font size for options */
+        }
+
+
+
+        .posts .post {
+          display: flex;
+          padding: 15px;
+          background: white;
+          margin-bottom: 10px;
+          border-radius: 5px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .posts .post .votes {
+          margin-right: 20px;
+          text-align: center;
+        }
+
+        .posts .post .content a {
+          font-size: 1.1em;
+          font-weight: bold;
+          color: #0074cc;
+          text-decoration: none;
+        }
+
+        .posts .post .tags span {
+          background: #e1ecf4;
+          color: #39739d;
+          padding: 3px 8px;
+          margin-right: 5px;
+          border-radius: 3px;
+          font-size: 0.8em;
+        }
+
+        .widgets {
+          width: 300px;
+          padding: 20px;
+        }
+
+        .widget {
+          margin-bottom: 20px;
+          background: white;
+          padding: 10px;
+          border-radius: 5px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+          text-align: center;
+          padding: 10px;
+          background-color: #343a40;
+          color: white;
+        }
