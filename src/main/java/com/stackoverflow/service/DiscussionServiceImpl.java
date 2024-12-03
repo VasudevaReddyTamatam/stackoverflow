@@ -49,7 +49,6 @@ public class DiscussionServiceImpl implements DiscussionService{
                     return (tag != null) ? tag : new Tag(tagName);
                 })
                 .collect(Collectors.toSet());
-
         discussion.setDiscussionTags(tags);
 
         Discussion createdDiscussion = discussionRepository.save(discussion);
