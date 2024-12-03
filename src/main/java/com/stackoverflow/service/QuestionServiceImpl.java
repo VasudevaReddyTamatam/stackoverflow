@@ -47,11 +47,12 @@ public class QuestionServiceImpl implements QuestionService{
         Question question = modelMapper.map(questionRequestDTO, Question.class);
         User user=userService.getUserById(1L);
         question.setUser(user);
-
         Set<Tag> tags = questionRequestDTO.getTagsList().stream()
-                .map(tagName -> tagRepository.findByName(tagName).orElseGet(() -> new Tag(tagName)))
+                .map(tagName -> {
+                    Tag tag = tagRepository.findByName(tagName);
+                    return (tag != null) ? tag : new Tag(tagName);
+                })
                 .collect(Collectors.toSet());
-
         question.setTags(tags);
 
         Question createdQuestion = questionRepository.save(question);
@@ -77,6 +78,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public void updateQuestion(Long id, Question question){
         question.setUpdatedAt(LocalDateTime.now());
+        question.setCreatedAt(LocalDateTime.now());
         questionRepository.save(question);
     }
 }

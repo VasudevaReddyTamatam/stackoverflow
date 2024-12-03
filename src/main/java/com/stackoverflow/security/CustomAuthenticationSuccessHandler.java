@@ -30,6 +30,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         User user = userService.getUserByEmail(email);
         Long userId = user.getId();
 
-        response.sendRedirect("/users/dashboard");
+        response.sendRedirect("/home");
     }
 }
