@@ -43,6 +43,29 @@
       display: flex;
     }
 
+   .comment input{
+   width: 500px;
+   height: 3px;
+   padding: 20px;
+   margin-bottom: 10px;
+    margin-top: 10px;
+   font-weight: bold;
+   border-radius:5px
+   }
+   .comment button{
+    background-color: #b2dfec;
+    color: rgb(26, 24, 24);
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: left;
+    font-weight: bold;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+         transition: all 0.3s ease;
+         text-decoration: none;
+   }
     aside {
       width: 200px;
       padding: 20px;
@@ -94,6 +117,7 @@
       cursor: pointer;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
+      text-decoration: none;
     }
 
     main .card {
@@ -227,6 +251,7 @@
   padding: 3px 8px;
   border-radius: 3px;
   font-size: 0.9em;
+  text-decoration: none;
 }
 
 .answers h2 {

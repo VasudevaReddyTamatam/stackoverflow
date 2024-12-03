@@ -1,9 +1,13 @@
 package com.stackoverflow.controller;
 
 import com.stackoverflow.model.Answer;
+import com.stackoverflow.model.Comment;
 import com.stackoverflow.model.Question;
 import com.stackoverflow.service.AnswerService;
+import com.stackoverflow.service.CommentService;
 import com.stackoverflow.service.QuestionService;
+import com.stackoverflow.service.UserService;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +20,15 @@ public class AnswerController {
 
     private final AnswerService answerService;
     private final QuestionService questionService;
+    private final UserService userService;
+    private final CommentService commentService;
 
-    public AnswerController(AnswerService answerService, QuestionService questionService) {
+    public AnswerController(AnswerService answerService, QuestionService questionService,
+                            UserService userService,CommentService commentService) {
         this.answerService = answerService;
         this.questionService = questionService;
+        this.userService=userService;
+        this.commentService=commentService;
     }
 
     @GetMapping("/{questionId}")
@@ -88,5 +97,15 @@ public class AnswerController {
         answer.setDownvotes(downvote);
         answerService.updateAnswer(answer);
         return "redirect:/questions/" + questionId;
+    }
+
+    @PostMapping("comment/{questionId}/{id}")
+    public String createanswerComment(@PathVariable("questionId") Long questionId,@PathVariable("id") Long answerId, @RequestParam("comment") String comment, Model model){
+        Comment c=new Comment();
+        c.setContent(comment);
+        c.setUser(userService.getUserById(1L));
+        c.setAnswer(answerService.findAnswerById(answerId));
+        commentService.saveComment(c);
+        return "redirect:/questions/"+questionId;
     }
 }

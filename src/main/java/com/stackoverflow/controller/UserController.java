@@ -66,7 +66,7 @@ public class UserController {
         try {
             User user = userService.login(request.getEmail(), request.getPassword());
             model.addAttribute("user", user);
-            return "redirect:/users/dashboard";
+            return "forward:/home";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "user/login";

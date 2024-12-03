@@ -3,18 +3,17 @@ package com.stackoverflow.controller;
 import com.stackoverflow.dto.AnswerRequestDTO;
 import com.stackoverflow.dto.CommentRequestDTO;
 import com.stackoverflow.dto.QuestionRequestDTO;
-import com.stackoverflow.model.Answer;
-import com.stackoverflow.model.Question;
-import com.stackoverflow.model.Tag;
+import com.stackoverflow.model.*;
 import com.stackoverflow.service.CommentService;
 import com.stackoverflow.service.QuestionService;
 import com.stackoverflow.service.UserServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,11 +26,12 @@ public class QuestionController {
     private final CommentService commentService;
     private final ModelMapper modelMapper;
 
-    public QuestionController(QuestionService questionService, UserServiceImpl userService, CommentService commentService, ModelMapper modelMapper) {
+    public QuestionController(QuestionService questionService, UserServiceImpl userService,
+                              CommentService commentService,ModelMapper modelMapper) {
         this.questionService = questionService;
         this.userService = userService;
         this.commentService = commentService;
-        this.modelMapper = modelMapper;
+        this.modelMapper=modelMapper;
     }
 
     @GetMapping("/home")
@@ -55,8 +55,16 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String getQuestionById(@PathVariable("id") Long questionId, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            model.addAttribute("user", null);
+        }
+        else {
+            String email = authentication.getName();
+            User user = userService.getUserByEmail(email);
+            model.addAttribute("user", user);
+        }
         Question question = questionService.getQuestionById(questionId);
-
         model.addAttribute("question", question);
         return "question/detail";
     }
@@ -77,6 +85,15 @@ public class QuestionController {
         question.setDownvotes(downvote);
         questionService.updateQuestion(id,question);
         return "redirect:/questions/" + id;
+    }
+    @PostMapping("comment/{id}")
+    public String createComment(@PathVariable("id") Long questionId, @RequestParam("comment") String comment, Model model){
+        Comment c=new Comment();
+        c.setContent(comment);
+        c.setUser(userService.getUserById(1L));
+        c.setQuestion(questionService.getQuestionById(questionId));
+        commentService.saveComment(c);
+        return "redirect:/questions/" + questionId;
     }
 
     @GetMapping("/edit/{id}")
@@ -108,7 +125,7 @@ public class QuestionController {
 
     @GetMapping("/delete/{id}")
     public String deleteQuestion(@PathVariable("id") Long id) {
-         questionService.deleteQuestion(id);
-         return "redirect:/questions/home";
+        questionService.deleteQuestion(id);
+        return "redirect:/questions/home";
     }
 }

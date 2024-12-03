@@ -38,7 +38,7 @@ public class TagServiceImpl implements TagService {
         tagDao.deleteById(id);
     }
     @Override
-    public List<Tag> searchTagsByName(String keyword) {
+    public Set<Tag> searchTagsByName(String keyword) {
         return tagDao.findByNameContainingIgnoreCase(keyword); // Case-insensitive search
     }
 }

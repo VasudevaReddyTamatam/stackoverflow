@@ -11,5 +11,5 @@ public interface TagService {
     public void saveTag(Tag tag);
     Tag findTagById(long id);
     public void deleteTagById(long id);
-    List<Tag> searchTagsByName(String keyword);
+    Set<Tag> searchTagsByName(String keyword);
 }

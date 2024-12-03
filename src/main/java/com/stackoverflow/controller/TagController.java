@@ -32,7 +32,7 @@ public class TagController {
 
     @GetMapping("/search")
     public String searchTags(@RequestParam("keyword") String keyword, Model model) {
-        List<Tag> tags = tagService.searchTagsByName(keyword);
+        Set<Tag> tags = tagService.searchTagsByName(keyword);
         model.addAttribute("tags", tags);
         model.addAttribute("keyword", keyword);
         return "tags";

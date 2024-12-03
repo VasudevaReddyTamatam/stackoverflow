@@ -37,10 +37,17 @@
                 </div>
             </div>
             <div class="question-footer">
-                <span><a th:href="@{/questions/edit/{id}(id=${question.id})}">Edit</a></span> | <span><a th:href="@{/questions/delete/{id}(id=${question.id})}">Delete</a></span> | <span>comment</span>
+                <span><a th:href="@{/questions/edit/{id}(id=${question.id})}">Edit</a>
+                </span> |
+                <span><a th:href="@{/questions/delete/{id}(id=${question.id})}">Delete</a></span>
+                <div class="comment" >
+                    <form th:action="@{/questions/comment/{id}(id=${question.id})}" method="post">
+                    <input type="text" placeholder="add comment.." name="comment" >
+                        <button  >Add Comment</button>
+                    </form>
+                </div>
                 <ul>
-                    <li>1st commet</li>
-                    <li>2nd commet</li>
+                    <li th:each="comment:${question.comments}" th:text="${comment.content}">1st commet</li>
                 </ul>
             </div>
             <section class="answers" >
@@ -63,10 +70,15 @@
                             Answered by <strong th:text="${answer.user.username}"></strong> 45 mins ago
                         </p>
                         <div class="question-footer">
-                            <span>Edit</span> | <span>Delete</span> | <span>comment</span>
+<!--                            <span>Edit</span> | <span>Delete</span>-->
+                            <div class="comment" >
+                                <form th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
+                                    <input type="text" placeholder="add comment.." name="comment" >
+                                    <button  >Add Comment</button>
+                                </form>
+                            </div>
                             <ul>
-                                <li>1st commet</li>
-                                <li>2nd commet</li>
+                                <li th:each="comment:${answer.comments}" th:text="${comment.content}"></li>
                             </ul>
                         </div>
                     </div>
