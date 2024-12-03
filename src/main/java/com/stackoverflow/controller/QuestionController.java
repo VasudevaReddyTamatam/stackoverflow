@@ -38,6 +38,17 @@ public class QuestionController {
     public String questionDashboard(Model model){
         List<Question> questionList=questionService.getAllQuestions();
         model.addAttribute("questions",questionList);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            model.addAttribute("user", null);
+        }
+        else {
+            String email = authentication.getName();
+            User user = userService.getUserByEmail(email);
+            model.addAttribute("user", user);
+        }
+
         return "question/QuestionDashboard";
     }
 
