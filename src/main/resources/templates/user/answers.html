@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Answers</title>
+</head>
+<body>
+<div class="container">
+    <h1>Answers by <span th:text="${user.username}">User Name</span></h1>
+    <ul>
+        <li th:each="answer : ${answers}">
+            <a th:href="@{/questions/{id}(id=${answer.question.id})}" th:text="${answer.content}">Answer Content</a>
+        </li>
+    </ul>
+    <a th:href="@{/users/profile/{userId}(userId=${user.id})}" class="btn">Back to Profile</a>
+</div>
+</body>
+</html>

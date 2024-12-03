@@ -1,0 +1,106 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Profile</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Welcome, <span th:text="${user.username}"></span></h1>-->
+<!--<p>Email: <span th:text="${user.email}"></span></p>-->
+<!--<p>Bio: <span th:text="${user.profile.bio}"></span></p>-->
+<!--<a th:href="@{/users/{userId}/profile/edit(userId=${user.id})}">Edit Profile</a>-->
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fff4; /* Light green background */
+            color: #2f4f4f; /* Dark text */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff; /* White background for profile card */
+            border: 1px solid #b5d3a0; /* Light green border */
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #006400; /* Dark green */
+            border-bottom: 2px solid #d0f0c0; /* Light green underline */
+            padding-bottom: 10px;
+        }
+
+        p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #2e8b57; /* Sea green */
+        }
+
+        .actions {
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            margin-right: 10px;
+            background-color: #68b36b; /* Medium green */
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #4d9a51; /* Darker green */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>User Profile</h1>
+
+    <p><span class="label">Name:</span> <span th:text="${user.username}">User Name</span></p>
+    <p><span class="label">Email:</span> <span th:text="${user.email}">user@example.com</span></p>
+
+    <div th:if="${user.profile != null}">
+        <p><span class="label">Bio:</span> <span th:text="${user.profile.bio}">Short bio about the user</span></p>
+    </div>
+
+    <div th:if="${user.profile == null}">
+        <p>No additional profile information available.</p>
+    </div>
+
+    <div class="actions">
+        <a th:href="@{/users/{userId}/profile/edit(userId=${user.id})}" class="btn">Edit Profile</a>
+
+        <a th:href="@{/home}" class="btn">Back to Home</a>
+    </div>
+
+    <div class="actions">
+        <br>
+        <a th:href="@{/users/{userId}/questions(userId=${user.id})}" class="btn">View Questions</a>
+        <a th:href="@{/users/{userId}/answers(userId=${user.id})}" class="btn">View Answers</a>
+        <a th:href="@{/users/{userId}/comments(userId=${user.id})}" class="btn">View Comments</a>
+        <a th:href="@{/logout}" class="btn">Logout</a>
+    </div>
+
+</div>
+</body>
+</html>

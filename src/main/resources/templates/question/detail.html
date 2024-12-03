@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Overflow Dashboard</title>
+    <link rel="stylesheet" href="/css/detail.css">
+</head>
+<body>
+<div th:replace="fragments.html :: header"></div>
+
+<div class="container">
+    <div th:replace="fragments.html :: side"></div>
+
+    <main>
+
+        <div class="text-content">
+            <h1 th:text="${question.title}">quetion title</h1>
+        </div>
+        <section class="posts">
+            <div class="question-details">
+                <div class="votes">
+                    <form th:action="@{/questions/upvote/{id}(id=${question.id})}">
+                        <button>▲</button>
+                    </form>
+                    <span th:text="${question.upvotes}-${question.downvotes}"></span>
+                    <form th:action="@{/questions/downvote/{id}(id=${question.id})}">
+                        <button>▼</button>
+                    </form>
+                </div>
+                <div class="question-body">
+                    <p th:text="${question.description}">
+                    </p>
+                     <div class="tags">
+                        <span th:each="tag:${question.tags}" th:text="${tag.name}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="question-footer">
+                <span><a th:href="@{/questions/edit/{id}(id=${question.id})}">Edit</a>
+                </span> |
+                <span><a th:href="@{/questions/delete/{id}(id=${question.id})}">Delete</a></span>
+                <div class="comment" >
+                    <form th:action="@{/questions/comment/{id}(id=${question.id})}" method="post">
+                    <input type="text" placeholder="add comment.." name="comment" >
+                        <button  >Add Comment</button>
+                    </form>
+                </div>
+                <ul>
+                    <li th:each="comment:${question.comments}" th:text="${comment.content}">1st commet</li>
+                </ul>
+            </div>
+            <section class="answers" >
+                <h2 th:text="${#lists.size(question.answers)}+' Answers'"></h2>
+                <article class="answer" th:each="answer:${question.answers}">
+                    <div class="votes">
+                        <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
+                        <button>▲</button>
+                        </form>
+                        <span th:text="${answer.upvotes}-${answer.downvotes}"></span>
+                        <form th:action="@{/answers/downvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
+                        <button>▼</button>
+                        </form>
+                    </div>
+                    <div class="answer-body">
+                        <p th:text="${answer.content}">
+                        </p>
+                        <br>
+                        <p class="author">
+                            Answered by <strong th:text="${answer.user.username}"></strong> 45 mins ago
+                        </p>
+                        <div class="question-footer">
+<!--                            <span>Edit</span> | <span>Delete</span>-->
+                            <div class="comment" >
+                                <form th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
+                                    <input type="text" placeholder="add comment.." name="comment" >
+                                    <button  >Add Comment</button>
+                                </form>
+                            </div>
+                            <ul>
+                                <li th:each="comment:${answer.comments}" th:text="${comment.content}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+            </section>
+            <div class="form-group">
+                <form th:action="@{/answers/save/{questionId}(questionId=${question.id})}" method="post">
+                <label for="body"><b>Add your Answer</b></label><br>
+                <textarea id="body" name="answer" rows="5" placeholder="Write your discussion here..."></textarea><br>
+                <input type="submit" value="Add answer" class="main-button">
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <aside class="widgets">
+        <a th:href="@{/questions/ask}" class="main-button">Ask Questions</a>
+    </aside>
+</div>
+<div th:replace="fragments.html :: footer"></div>
+</body>
+</html>

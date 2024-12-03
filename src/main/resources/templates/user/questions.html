@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Questions</title>
+</head>
+<body>
+<div class="container">
+    <h1>Questions by <span th:text="${user.username}">User Name</span></h1>
+    <ul>
+        <li th:each="question : ${questions}">
+            <a th:href="@{/questions/{id}(id=${question.id})}" th:text="${question.title}">Question Title</a>
+        </li>
+    </ul>
+    <a th:href="@{/users/profile/{userId}(userId=${user.id})}" class="btn">Back to Profile</a>
+</div>
+</body>
+</html>

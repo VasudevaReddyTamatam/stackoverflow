@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa; /* Matching dashboard background */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full screen height */
+        }
+
+        /* Center the form */
+        .login-container {
+            text-align: center; /* Center title and form */
+        }
+
+        form {
+            background-color: #ffffff; /* White background for contrast */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+            max-width: 400px; /* Limit form width */
+            margin: 0 auto; /* Center the form horizontally */
+            width: 100%; /* Responsive width */
+        }
+
+        /* Form elements */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333; /* Dark text for readability */
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 5px;
+            box-sizing: border-box; /* Ensure padding doesn't affect total width */
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #b2dfec; /* Highlight border on focus */
+            box-shadow: 0 0 5px #b2dfec; /* Subtle glow effect */
+        }
+
+        button {
+            background-color: #b2dfec; /* Matching dashboard button color */
+            color: rgb(26, 24, 24);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Full width button */
+        }
+
+        button:hover {
+            background-color: #68b36b; /* Slightly darker green on hover */
+        }
+
+        /* Error message */
+        p[th\\:if] {
+            color: #d9534f; /* Red for error messages */
+            font-weight: bold;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #0074cc; /* Matching blue for headers */
+        }
+     .signup-section {
+        margin-top: 20px;
+    }
+
+    .signup-section .signup-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #b2dfec; /* Matching dashboard button color */
+        color: rgb(26, 24, 24);
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        text-align: center;
+    }
+
+    .signup-section .signup-button:hover {
+        background-color: #68b36b; /* Slightly darker green on hover */
+        color: white; /* White text on hover */
+    }
+    </style>
+    <title>Login</title>
+</head>
+<body>
+<div class="login-container">
+    <h1>Login</h1>
+    <form th:action="@{/users/login}" method="post" th:object="${loginRequest}">
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required/><br/>
+        <label>Password:</label>
+        <input type="password" th:field="*{password}" required/><br/>
+        <button type="submit">Login</button>
+    </form>
+    <p th:if="${error}" th:text="${error}"></p>
+    <div class="signup-section">
+        <p>Don't have an account?</p>
+        <a th:href="@{/users/register}" class="signup-button">Sign Up</a>
+    </div>
+</div>
+</body>
+
