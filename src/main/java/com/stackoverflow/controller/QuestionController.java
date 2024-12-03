@@ -5,14 +5,18 @@ import com.stackoverflow.dto.CommentRequestDTO;
 import com.stackoverflow.dto.QuestionRequestDTO;
 import com.stackoverflow.model.Answer;
 import com.stackoverflow.model.Question;
+import com.stackoverflow.model.Tag;
 import com.stackoverflow.service.CommentService;
 import com.stackoverflow.service.QuestionService;
 import com.stackoverflow.service.UserServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/questions")
@@ -21,14 +25,14 @@ public class QuestionController {
     private final QuestionService questionService;
     private final UserServiceImpl userService;
     private final CommentService commentService;
+    private final ModelMapper modelMapper;
 
-    public QuestionController(QuestionService questionService, UserServiceImpl userService, CommentService commentService) {
+    public QuestionController(QuestionService questionService, UserServiceImpl userService, CommentService commentService, ModelMapper modelMapper) {
         this.questionService = questionService;
         this.userService = userService;
         this.commentService = commentService;
+        this.modelMapper = modelMapper;
     }
-
-
 
     @GetMapping("/home")
     public String homePage(Model model){
@@ -75,4 +79,36 @@ public class QuestionController {
         return "redirect:/questions/" + id;
     }
 
+    @GetMapping("/edit/{id}")
+    public String editQuestionForm(@PathVariable("id") Long id, Model model) {
+        Question existingQuestion = questionService.getQuestionById(id);
+
+        QuestionRequestDTO questionRequestDTO = new QuestionRequestDTO();
+        questionRequestDTO.setId(existingQuestion.getId());
+        questionRequestDTO.setTitle(existingQuestion.getTitle());
+        questionRequestDTO.setDescription(existingQuestion.getDescription());
+        questionRequestDTO.setTagsList(
+                existingQuestion.getTags().stream()
+                        .map(Tag::getName) // Directly map each Tag to its name
+                        .collect(Collectors.toSet()) // Collect the names into a Set
+        );
+
+        model.addAttribute("questionRequestDTO", questionRequestDTO);// Set the form action URL for updating
+        return "question/create";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateQuestion(@PathVariable("id") Long id,
+                                 @ModelAttribute("questionRequestDTO") QuestionRequestDTO updatedQuestionDetails,
+                                 Model model) {
+        Question question = modelMapper.map(updatedQuestionDetails, Question.class);
+        questionService.updateQuestion(id, question);
+        return "redirect:/questions/" + id;
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteQuestion(@PathVariable("id") Long id) {
+         questionService.deleteQuestion(id);
+         return "redirect:/questions/home";
+    }
 }

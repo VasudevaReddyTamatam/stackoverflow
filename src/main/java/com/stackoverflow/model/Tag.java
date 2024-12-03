@@ -54,7 +54,4 @@ public class Tag {
         this.name = name;
     }
 
-
-    @ManyToMany(mappedBy = "discussionTags")
-    private List<Discussion> discussions;
 }

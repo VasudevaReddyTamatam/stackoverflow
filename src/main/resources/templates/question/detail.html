@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="question-footer">
-                <span>Edit</span> | <span>Delete</span> | <span>comment</span>
+                <span><a th:href="@{/questions/edit/{id}(id=${question.id})}">Edit</a></span> | <span><a th:href="@{/questions/delete/{id}(id=${question.id})}">Delete</a></span> | <span>comment</span>
                 <ul>
                     <li>1st commet</li>
                     <li>2nd commet</li>

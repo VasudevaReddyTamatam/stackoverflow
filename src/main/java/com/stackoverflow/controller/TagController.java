@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/tags")
@@ -40,7 +41,7 @@ public class TagController {
     @GetMapping("/{tagId}/questions")
     public String listQuestionsByTag(@PathVariable Long tagId, Model model) {
         Tag selectedTag = tagService.findTagById(tagId);
-        List<Question> questions = selectedTag.getQuestions();
+        Set<Question> questions = selectedTag.getQuestion();
         model.addAttribute("questions", questions);
         model.addAttribute("selectedTagName", selectedTag.getName());
         return "tags";
