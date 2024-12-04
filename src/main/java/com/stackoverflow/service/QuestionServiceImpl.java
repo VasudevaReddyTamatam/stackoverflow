@@ -49,16 +49,9 @@ public class QuestionServiceImpl implements QuestionService{
         Question question = modelMapper.map(questionRequestDTO, Question.class);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
-            User user=userService.getUserById(1L);
-            question.setUser(user);
-        }
-        else {
-            String email = authentication.getName();
-            User user = userService.getUserByEmail(email);
-            question.setUser(user);
-        }
-
+        String email = authentication.getName();
+        User user = userService.getUserByEmail(email);
+        question.setUser(user);
         Set<Tag> tags = questionRequestDTO.getTagsList().stream()
                 .map(tagName -> {
                     Tag tag = tagRepository.findByName(tagName);
@@ -88,9 +81,29 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
+    @Transactional
+    public void updateQuestionWithDTO(Long id, QuestionRequestDTO questionRequestDTO) {
+        Question existingQuestion = questionRepository.findById(id).get();
+
+        existingQuestion.setTitle(questionRequestDTO.getTitle());
+        existingQuestion.setDescription(questionRequestDTO.getDescription());
+        Set<Tag> tags = questionRequestDTO.getTagsList().stream()
+                .map(tagName -> {
+                    Tag tag = tagRepository.findByName(tagName);
+                    return (tag != null) ? tag : new Tag(tagName);
+                })
+                .collect(Collectors.toSet());
+        existingQuestion.setTags(tags);
+        existingQuestion.setUpdatedAt(LocalDateTime.now());
+        questionRepository.save(existingQuestion);
+    }
+
+    @Override
     public void updateQuestion(Long id, Question question){
         question.setUpdatedAt(LocalDateTime.now());
         question.setCreatedAt(LocalDateTime.now());
         questionRepository.save(question);
     }
+
+
 }

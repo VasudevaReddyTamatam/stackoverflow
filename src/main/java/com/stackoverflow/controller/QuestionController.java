@@ -4,6 +4,7 @@ import com.stackoverflow.dto.AnswerRequestDTO;
 import com.stackoverflow.dto.CommentRequestDTO;
 import com.stackoverflow.dto.QuestionRequestDTO;
 import com.stackoverflow.model.*;
+import com.stackoverflow.repository.TagRepository;
 import com.stackoverflow.service.CommentService;
 import com.stackoverflow.service.QuestionService;
 import com.stackoverflow.service.UserServiceImpl;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -25,13 +27,15 @@ public class QuestionController {
     private final UserServiceImpl userService;
     private final CommentService commentService;
     private final ModelMapper modelMapper;
+    private final TagRepository tagRepository;
 
     public QuestionController(QuestionService questionService, UserServiceImpl userService,
-                              CommentService commentService,ModelMapper modelMapper) {
+                              CommentService commentService,ModelMapper modelMapper, TagRepository tagRepository) {
         this.questionService = questionService;
         this.userService = userService;
         this.commentService = commentService;
         this.modelMapper=modelMapper;
+        this.tagRepository = tagRepository;
     }
 
     @GetMapping
@@ -130,8 +134,7 @@ public class QuestionController {
     public String updateQuestion(@PathVariable("id") Long id,
                                  @ModelAttribute("questionRequestDTO") QuestionRequestDTO updatedQuestionDetails,
                                  Model model) {
-        Question question = modelMapper.map(updatedQuestionDetails, Question.class);
-        questionService.updateQuestion(id, question);
+        questionService.updateQuestionWithDTO(id, updatedQuestionDetails);
         return "redirect:/questions/" + id;
     }
 

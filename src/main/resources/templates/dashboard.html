@@ -30,7 +30,7 @@
                     <div class="tags">
                         <span th:each="tag : ${question.tags}" th:text="${tag.name}"></span>
                     </div>
-                    <p class="author" th:text="'Asked by ' + ${question.user.username}"></p>
+                   <p class="author" th:text="'Asked by ' + ${question.user.username}"></p>
                 </div>
             </div>
         </section>
