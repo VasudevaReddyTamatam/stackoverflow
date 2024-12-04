@@ -11,6 +11,4 @@ public interface QuestionService {
     List<Question> getAllQuestions();
     void updateQuestion(Long id, Question question);
     void deleteQuestion(Long id);
-//    List<Question> searchQuestions(String title, String tag);
-//    List<Question> filterQuestionsByStatus(String status);
 }
