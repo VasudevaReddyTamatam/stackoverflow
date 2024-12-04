@@ -44,15 +44,9 @@ public class DiscussionServiceImpl implements DiscussionService{
         Discussion discussion = modelMapper.map(questionRequestDTO, Discussion.class);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
-            User user=userService.getUserById(1L);
-            discussion.setUser(user);
-        }
-        else {
-            String email = authentication.getName();
-            User user = userService.getUserByEmail(email);
-            discussion.setUser(user);
-        }
+        String email = authentication.getName();
+        User user = userService.getUserByEmail(email);
+        discussion.setUser(user);
 
         Set<Tag> tags = questionRequestDTO.getTagsList().stream()
                 .map(tagName -> {
