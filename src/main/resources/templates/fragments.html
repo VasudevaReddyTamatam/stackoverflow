@@ -15,9 +15,9 @@
         <input type="text" placeholder="Search..." class="search-bar">
         <div class="header-right">
             <div class="icons">
-                <span>🔔<strong>Notifications</strong></span>
                 <span th:if="${user != null}">
                 <a th:href="@{/users/profile/{userId}(userId=${user.id})}" style="text-decoration: none; color: inherit;">
+                    <span>🔔<strong>Notifications</strong></span>
                     👤<strong th:text="${user.username}">User</strong>
                 </a>
             </span>

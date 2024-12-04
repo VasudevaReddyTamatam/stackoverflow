@@ -52,23 +52,17 @@ public class QuestionController {
         return "question/QuestionDashboard";
     }
 
-    @GetMapping("/home")
-    public String homePage(Model model){
-        List<Question> questionList=questionService.getAllQuestions();
-        model.addAttribute("questions",questionList);
-        return "dashboard";
-    }
-
     @GetMapping("/ask")
     public String questionPage(Model model){
         model.addAttribute("questionRequestDTO", new QuestionRequestDTO());
         return "question/create";
     }
 
+
     @PostMapping("/create")
     public String createQuestion(@ModelAttribute("questionRequestDTO") QuestionRequestDTO questionRequestDTO) {
         Question createdQuestion = questionService.createQuestion(questionRequestDTO);
-        return "redirect:/questions/home";
+        return "redirect:/home";
     }
 
     @GetMapping("/{id}")
@@ -144,7 +138,7 @@ public class QuestionController {
     @GetMapping("/delete/{id}")
     public String deleteQuestion(@PathVariable("id") Long id) {
         questionService.deleteQuestion(id);
-        return "redirect:/questions/home";
+        return "redirect:/home";
     }
 
 
