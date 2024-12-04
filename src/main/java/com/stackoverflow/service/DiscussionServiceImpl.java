@@ -8,6 +8,8 @@ import com.stackoverflow.model.User;
 import com.stackoverflow.repository.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +42,17 @@ public class DiscussionServiceImpl implements DiscussionService{
     @Transactional
     public Discussion createDiscussion(QuestionRequestDTO questionRequestDTO) {
         Discussion discussion = modelMapper.map(questionRequestDTO, Discussion.class);
-        User user=userService.getUserById(1L);
-        discussion.setUser(user);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            User user=userService.getUserById(1L);
+            discussion.setUser(user);
+        }
+        else {
+            String email = authentication.getName();
+            User user = userService.getUserByEmail(email);
+            discussion.setUser(user);
+        }
 
         Set<Tag> tags = questionRequestDTO.getTagsList().stream()
                 .map(tagName -> {

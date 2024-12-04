@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tag Dashboard</title>
+  <link rel="stylesheet" href="/css/tags.css">
+</head>
+<body>
+<div th:replace="fragments.html :: header"></div>
+<div class="container">
+  <div th:replace="fragments.html :: side"></div>
+  <main>
+
+    <h1>Tags - Stack Overflow</h1>
+    <div class="container">
+      <!-- Search Bar -->
+      <form th:action="@{/tags/search}" method="get">
+        <input type="text" name="keyword" class="search-bar" placeholder="Search for a tag..." th:value="${keyword}">
+        <button type="submit">Search</button>
+      </form>
+
+      <!-- Tags List -->
+      <section class="tags-list">
+        <a th:each="tag : ${tags}" th:href="@{/tags/{tagId}/questions(tagId=${tag.id})}" th:text="${tag.name}" class="tag"></a>
+      </section>
+
+      <!-- Questions Section -->
+      <section class="questions-section" th:if="${questions != null}">
+        <h2 th:text="'Questions tagged with ' + ${selectedTagName}"></h2>
+        <div th:each="question : ${questions}" class="question">
+          <a th:href="@{/questions/{id}(id=${question.id})}" th:text="${question.title}">Question Title</a>
+          <p th:text="${question.description}">Question description...</p>
+        </div>
+      </section>
+    </div>
+
+  </main>
+</div>
+<div th:replace="fragments.html :: footer"></div>
+</body>
+</html>
