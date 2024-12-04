@@ -3,36 +3,52 @@ import com.stackoverflow.model.Image;
 import com.stackoverflow.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
-@RequestMapping("/images")
+@RequestMapping("/uploads")
 public class ImageController {
 
     @Autowired
     private ImageService imageService;
 
-    @GetMapping
-    public String showfrom(){
-        return "Image";
-    }
 
-    // Endpoint for uploading an image
-    @PostMapping("/upload")
-    public String uploadImage(@RequestParam("image") MultipartFile file) {
+    @PostMapping("/image")
+    public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            imageService.uploadImage(file); // Save image to database
-            return "dashboard";
+            Long imageId = imageService.uploadImage(file).getId(); // Save image to database
+            String imageUrl = "/uploads/image/" + imageId; // URL to access the image
+            return ResponseEntity.ok(Map.of("location", imageUrl)); // TinyMCE expects 'location'
         } catch (IOException e) {
-            return "Image";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to upload image: " + e.getMessage()));
         }
     }
+
+
+    @GetMapping("/image/{id}")
+    @ResponseBody
+    public ResponseEntity<byte[]> getImageData(@PathVariable Long id) {
+        Image image = imageService.getImage(id);
+        if (image != null) {
+            return ResponseEntity.ok()
+                    .header("Content-Type", image.getType()) // e.g., "image/png"
+                    .body(image.getData());
+        } else {
+            return ResponseEntity.notFound().build(); // 404 if image not found
+        }
+    }
+
 
     @GetMapping("/{id}")
     public String getImage(@PathVariable Long id, Model model) {
@@ -47,17 +63,5 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/getImage/{id}")
-    @ResponseBody
-    public ResponseEntity<byte[]> getImageData(@PathVariable Long id) {
-        Image image = imageService.getImage(id);
-        if (image != null) {
-            return ResponseEntity.ok()
-                    .header("Content-Type", image.getType())  // Set content type to the image type
-                    .body(image.getData());  // Return the image byte array as the response
-        } else {
-            return ResponseEntity.notFound().build();  // Return 404 if the image is not found
-        }
-    }
 }
 
