@@ -26,9 +26,9 @@ public class ImageController {
     @PostMapping("/image")
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            Long imageId = imageService.uploadImage(file).getId(); // Save image to database
-            String imageUrl = "/uploads/image/" + imageId; // URL to access the image
-            return ResponseEntity.ok(Map.of("location", imageUrl)); // TinyMCE expects 'location'
+            Long imageId = imageService.uploadImage(file).getId();
+            String imageUrl = "/uploads/image/" + imageId;
+            return ResponseEntity.ok(Map.of("location", imageUrl));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Failed to upload image: " + e.getMessage()));
@@ -42,26 +42,14 @@ public class ImageController {
         Image image = imageService.getImage(id);
         if (image != null) {
             return ResponseEntity.ok()
-                    .header("Content-Type", image.getType()) // e.g., "image/png"
+                    .header("Content-Type", image.getType())
                     .body(image.getData());
         } else {
-            return ResponseEntity.notFound().build(); // 404 if image not found
+            return ResponseEntity.notFound().build();
         }
     }
 
 
-    @GetMapping("/{id}")
-    public String getImage(@PathVariable Long id, Model model) {
-        Image image = imageService.getImage(id);
-        if (image != null) {
-            // Pass the image data and other properties to the template
-            model.addAttribute("image", image);
-            return "ShowImage"; // Return a view to display the image
-        } else {
-            model.addAttribute("error", "Image not found.");
-            return "Image"; // Return error view if the image isn't found
-        }
-    }
 
 }
 
