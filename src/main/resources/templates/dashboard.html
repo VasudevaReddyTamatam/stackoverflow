@@ -13,7 +13,8 @@
     <main>
 
         <div class="text-content">
-            <h1>Welcome to Stack Overflow, [User's Name]!</h1>
+            <h1>Welcome to Stack Overflow, <span th:text="${user != null ? user.username : 'Guest'}">Username</span>
+                !</h1>
             <p>Find answers to your technical questions and help others answer theirs.</p>
         </div>
         <section class="posts">

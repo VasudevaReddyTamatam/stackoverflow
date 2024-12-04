@@ -11,6 +11,8 @@ import com.stackoverflow.repository.TagRepository;
 import com.stackoverflow.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -45,8 +47,18 @@ public class QuestionServiceImpl implements QuestionService{
     @Transactional
     public Question createQuestion(QuestionRequestDTO questionRequestDTO) {
         Question question = modelMapper.map(questionRequestDTO, Question.class);
-        User user=userService.getUserById(1L);
-        question.setUser(user);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            User user=userService.getUserById(1L);
+            question.setUser(user);
+        }
+        else {
+            String email = authentication.getName();
+            User user = userService.getUserByEmail(email);
+            question.setUser(user);
+        }
+
         Set<Tag> tags = questionRequestDTO.getTagsList().stream()
                 .map(tagName -> {
                     Tag tag = tagRepository.findByName(tagName);

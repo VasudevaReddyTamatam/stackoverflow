@@ -34,7 +34,7 @@ public class QuestionController {
         this.modelMapper=modelMapper;
     }
 
-    @GetMapping("/questionsdashboard")
+    @GetMapping
     public String questionDashboard(Model model){
         List<Question> questionList=questionService.getAllQuestions();
         model.addAttribute("questions",questionList);
