@@ -1,15 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <title>Profile</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<h1>Welcome, <span th:text="${user.username}"></span></h1>-->
-<!--<p>Email: <span th:text="${user.email}"></span></p>-->
-<!--<p>Bio: <span th:text="${user.profile.bio}"></span></p>-->
-<!--<a th:href="@{/users/{userId}/profile/edit(userId=${user.id})}">Edit Profile</a>-->
-<!--</body>-->
-<!--</html>-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -26,19 +14,20 @@
         }
 
         .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
             background-color: #ffffff; /* White background for profile card */
             border: 1px solid #b5d3a0; /* Light green border */
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
-            color: #006400; /* Dark green */
-            border-bottom: 2px solid #d0f0c0; /* Light green underline */
-            padding-bottom: 10px;
+            color: #39739d; /* Blue color */
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         p {
@@ -48,27 +37,45 @@
 
         .label {
             font-weight: bold;
-            color: #2e8b57; /* Sea green */
+            color: #39739d; /* Blue color for labels */
         }
 
-        .actions {
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
             margin-top: 20px;
         }
 
         .btn {
-            padding: 10px 15px;
-            margin-right: 10px;
-            background-color: #68b36b; /* Medium green */
-            color: white;
+            padding: 10px 20px;
+            background-color: #e1ecf4; /* Light blue background */
+            color: #39739d; /* Blue text */
+            font-weight: bold;
             text-decoration: none;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-align: center;
         }
 
         .btn:hover {
-            background-color: #4d9a51; /* Darker green */
+            background-color: #c9e6f2; /* Slightly darker blue */
+            transform: scale(1.05);
+        }
+
+        .bio-container {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -79,28 +86,26 @@
     <p><span class="label">Name:</span> <span th:text="${user.username}">User Name</span></p>
     <p><span class="label">Email:</span> <span th:text="${user.email}">user@example.com</span></p>
 
-    <div th:if="${user.profile != null}">
-        <p><span class="label">Bio:</span> <span th:text="${user.profile.bio}">Short bio about the user</span></p>
+    <div class="bio-container">
+        <div th:if="${user.profile != null}">
+            <p><span class="label">Bio:</span> <span th:text="${user.profile.bio}">Short bio about the user</span></p>
+        </div>
+        <div th:if="${user.profile == null}">
+            <p>No additional profile information available.</p>
+        </div>
     </div>
 
-    <div th:if="${user.profile == null}">
-        <p>No additional profile information available.</p>
-    </div>
-
-    <div class="actions">
+    <div class="btn-container">
         <a th:href="@{/users/{userId}/profile/edit(userId=${user.id})}" class="btn">Edit Profile</a>
-
-        <a th:href="@{/home}" class="btn">Back to Home</a>
-    </div>
-
-    <div class="actions">
-        <br>
         <a th:href="@{/users/{userId}/questions(userId=${user.id})}" class="btn">View Questions</a>
         <a th:href="@{/users/{userId}/answers(userId=${user.id})}" class="btn">View Answers</a>
         <a th:href="@{/users/{userId}/comments(userId=${user.id})}" class="btn">View Comments</a>
         <a th:href="@{/logout}" class="btn">Logout</a>
     </div>
 
+    <div class="back-btn">
+        <a th:href="@{/home}" class="btn">Back to Home</a>
+    </div>
 </div>
 </body>
 </html>
