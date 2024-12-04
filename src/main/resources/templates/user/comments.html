@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/user-comments.css">
+
   <title>User Comments</title>
 </head>
 <body>
@@ -10,7 +12,6 @@
   <ul>
     <li th:each="comment : ${comments}">
       <p th:text="${comment.content}">Comment content</p>
-<!--      <p><strong>On:</strong> <a th:href="@{/questions/{id}(id=${comment.parentId})}" th:text="'Question ID: ' + ${comment.parentId}">Question Link</a></p>-->
     </li>
   </ul>
   <a th:href="@{/users/profile/{userId}(userId=${user.id})}" class="btn">Back to Profile</a>
