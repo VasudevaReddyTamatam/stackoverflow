@@ -31,24 +31,24 @@ public class AnswerController {
         this.commentService=commentService;
     }
 
-    @GetMapping("/{questionId}")
-    public String getAnswersByQuestionId(@PathVariable Long questionId, Model model) {
-        Question question = questionService.getQuestionById(questionId);
-        List<Answer> answers = answerService.findAnswersByQuestionId(questionId);
-        model.addAttribute("answers", answers);
-        model.addAttribute("question", question);
-        return "answer_list";
-    }
+//    @GetMapping("/{questionId}")
+//    public String getAnswersByQuestionId(@PathVariable Long questionId, Model model) {
+//        Question question = questionService.getQuestionById(questionId);
+//        List<Answer> answers = answerService.findAnswersByQuestionId(questionId);
+//        model.addAttribute("answers", answers);
+//        model.addAttribute("question", question);
+//        return "answer_list";
+//    }
 
-    @GetMapping("/new/{questionId}")
-    public String showCreateAnswerForm(@PathVariable Long questionId, Model model) {
-        Question question = questionService.getQuestionById(questionId);
-        Answer answer = new Answer();
-        answer.setQuestion(question);
-        model.addAttribute("answer", answer);
-        model.addAttribute("question", question);
-        return "answer_form";
-    }
+//    @GetMapping("/new/{questionId}")
+//    public String showCreateAnswerForm(@PathVariable Long questionId, Model model) {
+//        Question question = questionService.getQuestionById(questionId);
+//        Answer answer = new Answer();
+//        answer.setQuestion(question);
+//        model.addAttribute("answer", answer);
+//        model.addAttribute("question", question);
+//        return "answer_form";
+//    }
 
     @PostMapping("/save/{questionId}")
     public String saveAnswer(@PathVariable Long questionId, @RequestParam("answer") String answer) {

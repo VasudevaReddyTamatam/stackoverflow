@@ -28,9 +28,12 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/users/register", "/users/login","/users/dashboard","/home").permitAll()
                         .requestMatchers("/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/questions/ask","/questions/upvote/**","/questions/downvote/**",
+                                     "/questions/comment/**").hasAnyRole("UESR","ADMIN")
+                        .requestMatchers("/answers/save/**","/answers/upvote/**",
+                                "/answers/downvote/**","/answers/comment/**","/discussion/create").hasAnyRole("USER","ADMIN")
                         .anyRequest().permitAll()
                 )
 

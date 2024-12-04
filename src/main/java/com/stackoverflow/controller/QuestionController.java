@@ -58,6 +58,7 @@ public class QuestionController {
         return "question/create";
     }
 
+
     @PostMapping("/create")
     public String createQuestion(@ModelAttribute("questionRequestDTO") QuestionRequestDTO questionRequestDTO) {
         Question createdQuestion = questionService.createQuestion(questionRequestDTO);
