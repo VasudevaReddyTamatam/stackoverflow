@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask a Question</title>
     <link rel="stylesheet" href="/css/create.css">
+
+    <!-- Load TinyMCE -->
+    <script src="https://cdn.tiny.cloud/1/gaau6m0a748v2n5gqlr64cznmvy5oqj7bav1d68jn1114pyz/tinymce/6/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#body', // The textarea ID
+            plugins: 'image link media table paste codesample',
+            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                     'bullist numlist outdent indent | link image media codesample | removeformat',
+            image_title: true,
+            automatic_uploads: true,
+            file_picker_types: 'image',
+            images_upload_url: '/uploads/image', // The endpoint for uploading images
+            images_upload_handler: function (blobInfo, success, failure) {
+                const formData = new FormData();
+                formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+                fetch('/uploads/image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => success(data))
+                .catch(err => failure('Error: ' + err.message));
+            }
+        });
+    </script>
 </head>
 <body>
 <main class="question-main">
@@ -25,7 +53,7 @@
 
             <div class="input-body">
                 <label for="body">What are the details of your problem?</label>
-                <textarea id="body" name="body" th:field="*{description}" placeholder="Describe your question here"></textarea>
+                <textarea id="body" name="description" th:field="*{description}" placeholder="Describe your question here"></textarea>
             </div>
 
             <div class="input-tags">

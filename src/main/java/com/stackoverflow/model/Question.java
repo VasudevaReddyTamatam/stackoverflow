@@ -1,7 +1,13 @@
 package com.stackoverflow.model;
-
+import com.stackoverflow.model.Answer;
+import com.stackoverflow.model.Comment;
+import com.stackoverflow.model.Tag;
+import com.stackoverflow.model.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,24 +16,26 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "questions")
 @Setter
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "questions")
-public class Question
-{
+public class Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @Column(nullable = false)
     private String title;
 
+    @Lob
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String description;
+    private String description; // For rich-text content
+
+    @Column(name = "image_url")
+    private String imageUrl; // URL or file path of the uploaded image
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -38,21 +46,16 @@ public class Question
     private Integer upvotes = 0;
     private Integer downvotes = 0;
 
-    @Column(nullable = false)
     private String status = "open";
 
-    @ManyToOne(cascade = {
-            CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers = new ArrayList<>();
 
-    @ManyToMany(cascade = {
-            CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "questions_tags",
             joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
