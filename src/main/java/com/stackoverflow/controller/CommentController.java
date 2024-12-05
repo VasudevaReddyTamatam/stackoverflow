@@ -30,7 +30,7 @@ public class CommentController {
     public String createanswerComment(@PathVariable("id") Long answerId, @RequestParam("comment") String comment, Model model){
         Comment c=new Comment();
         c.setContent(comment);
-        c.setUser(userService.getUserById(1L));
+        c.setUser(userService.getLoggedInUser());
         c.setAnswer(answerService.findAnswerById(answerId));
         return "question/detail";
     }

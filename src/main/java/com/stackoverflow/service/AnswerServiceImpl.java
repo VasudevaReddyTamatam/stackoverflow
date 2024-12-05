@@ -39,7 +39,7 @@ public class AnswerServiceImpl implements AnswerService {
         answer.setQuestion(question);
         answer.setCreatedAt(LocalDateTime.now());
         answer.setUpdatedAt(LocalDateTime.now());
-        answer.setUser(userService.getUserById(1L));
+        answer.setUser(userService.getLoggedInUser());
         return answerRepository.save(answer);
     }
 
