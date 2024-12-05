@@ -80,6 +80,22 @@ public class QuestionServiceImpl implements QuestionService{
         questionRepository.deleteById(id);
     }
 
+    @Transactional
+    @Override
+    public List<Question> searchQuestionByText(String text) {
+//        List<Question> allQuestions = questionRepository.findAll();
+//        return allQuestions.stream()
+//                .filter(q -> q.getDescription().replaceAll("<[^>]+>", "")
+//                        .toLowerCase().contains(text.toLowerCase()))
+//                .collect(Collectors.toList());
+        List<Question> t= questionRepository.getPlainTextFromLob();
+        for(Question q:t) {
+            System.out.println(q.getDescription() + "hiiemnwdke.............................................................");
+
+        }
+        return questionRepository.searchByContent(text);
+    }
+
     @Override
     @Transactional
     public void updateQuestionWithDTO(Long id, QuestionRequestDTO questionRequestDTO) {
