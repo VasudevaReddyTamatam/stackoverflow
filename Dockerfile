@@ -3,6 +3,6 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk:21-jdk-slim
-COPY --from=build /target/stackoverflow-0.0.1-SNAPSHOT.jar stackoverflow.jar
+COPY --from=build /target/stackoverflow-0.0.1-SNAPSHOT.jar stackoverflowclone.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "stackoverflow.jar"]
+ENTRYPOINT ["java", "-jar", "stackoverflowclone.jar"]
