@@ -33,7 +33,7 @@
         </div>
         <div class="content">
           <a th:href="@{/questions/{id}(id=${question.id})}" th:text="${question.title}">hi</a>
-          <p th:text="${question.description}">hello</p>
+          <p th:utext="${question.description}">hello</p>
           <div class="tags">
             <span th:each="tag : ${question.tags}" th:text="${tag.name}"></span>
           </div>

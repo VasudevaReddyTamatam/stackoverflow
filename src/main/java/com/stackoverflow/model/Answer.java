@@ -24,6 +24,7 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
