@@ -12,7 +12,9 @@
                 <h1>Stack Overflow</h1>
             </nav>
         </div>
-        <input type="text" placeholder="Search..." class="search-bar">
+        <form th:action="@{/search}" >
+        <input type="text" name="text" placeholder="Search..." class="search-bar">
+        </form>
         <div class="header-right">
             <div class="icons">
                 <span th:if="${user != null}">

@@ -29,7 +29,7 @@
       border: none;
       width: 100%; /* Default to full width of its container */
       max-width: 700px; /* Cap the maximum width for larger screens */
-      min-width: 250px; /* Ensure it doesn’t shrink too much on smaller screens */
+      min-width: 500px; /* Ensure it doesn’t shrink too much on smaller screens */
       box-sizing: border-box;
 
     }

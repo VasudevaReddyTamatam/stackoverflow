@@ -12,4 +12,5 @@ public interface QuestionService {
     void updateQuestion(Long id, Question question);
     void updateQuestionWithDTO(Long id, QuestionRequestDTO questionRequestDTO);
     void deleteQuestion(Long id);
+    List<Question> searchQuestionByText(String text);
 }
