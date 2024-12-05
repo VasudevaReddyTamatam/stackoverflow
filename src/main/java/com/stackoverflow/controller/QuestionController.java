@@ -106,7 +106,7 @@ public class QuestionController {
     public String createComment(@PathVariable("id") Long questionId, @RequestParam("comment") String comment, Model model){
         Comment c=new Comment();
         c.setContent(comment);
-        c.setUser(userService.getUserById(1L));
+        c.setUser(userService.getLoggedInUser());
         c.setQuestion(questionService.getQuestionById(questionId));
         commentService.saveComment(c);
         return "redirect:/questions/" + questionId;
@@ -144,5 +144,12 @@ public class QuestionController {
         return "redirect:/home";
     }
 
+    @PostMapping("/{questionId}/accept-answer/{answerId}")
+    public String acceptAnswer(
+            @PathVariable Long questionId,
+            @PathVariable Long answerId) {
 
+        questionService.acceptAnswer(questionId, answerId);
+        return "redirect:/questions/" + questionId;
+    }
 }

@@ -2,6 +2,8 @@ package com.stackoverflow.service;
 
 import com.stackoverflow.model.*;
 import com.stackoverflow.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -123,6 +125,16 @@ public class UserServiceImpl implements UserService{
         }
 
         return user;
+    }
+
+    @Override
+    public User getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            return null;
+        }
+        String email = authentication.getName();
+        return getUserByEmail(email);
     }
 
 //    public User login(String email, String password) {

@@ -105,5 +105,18 @@ public class QuestionServiceImpl implements QuestionService{
         questionRepository.save(question);
     }
 
+    @Override
+    @Transactional
+    public void acceptAnswer(Long questionId, Long answerId) {
+        Question question = questionRepository.findById(questionId).get();
+        Answer answer = answerRepository.findById(answerId).get();
 
+        question.setAcceptedAnswer(answer);
+        question.setStatus("closed");
+        answer.setIsAccepted(true);
+
+        questionRepository.save(question);
+        answerRepository.save(answer);
+
+    }
 }

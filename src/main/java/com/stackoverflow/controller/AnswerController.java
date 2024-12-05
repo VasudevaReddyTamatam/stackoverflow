@@ -103,7 +103,7 @@ public class AnswerController {
     public String createanswerComment(@PathVariable("questionId") Long questionId,@PathVariable("id") Long answerId, @RequestParam("comment") String comment, Model model){
         Comment c=new Comment();
         c.setContent(comment);
-        c.setUser(userService.getUserById(1L));
+        c.setUser(userService.getLoggedInUser());
         c.setAnswer(answerService.findAnswerById(answerId));
         commentService.saveComment(c);
         return "redirect:/questions/"+questionId;

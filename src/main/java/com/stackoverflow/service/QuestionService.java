@@ -12,4 +12,5 @@ public interface QuestionService {
     void updateQuestion(Long id, Question question);
     void updateQuestionWithDTO(Long id, QuestionRequestDTO questionRequestDTO);
     void deleteQuestion(Long id);
+    void acceptAnswer(Long questionId,Long answerId);
 }

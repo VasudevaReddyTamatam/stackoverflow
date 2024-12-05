@@ -109,7 +109,9 @@
 
             <section class="answers" >
                 <h2 th:text="${#lists.size(question.answers)}+' Answers'"></h2>
-                <article class="answer" th:each="answer:${question.answers}">
+                <h3>Accepted Answer:</h3>
+                <article class="answer" th:if="${answer.isAccepted}" th:each="answer:${question.answers}">
+
                     <div class="votes">
                         <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
                             <button>▲</button>
@@ -123,6 +125,62 @@
                         <p th:utext="${answer.content}">
                         </p>
                         <br>
+
+                        <button th:if="${answer.isAccepted}" class="accepted">Accepted</button>
+                        <form th:if="${!answer.isAccepted && user != null && user.username == question.user.username && question.status != 'closed'}"
+
+                              th:action="'/questions/' + ${question.id} + '/accept-answer/' + ${answer.id}"
+                              method="post">
+                            <button type="submit">Accept</button>
+                        </form>
+
+
+
+                        <p class="author">
+                            Answered by <strong th:text="${answer.user.username}"></strong> 45 mins ago
+                        </p>
+                        <div class="question-footer">
+                            <!--                            <span>Edit</span> | <span>Delete</span>-->
+                            <div class="comment" >
+                                <form th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
+                                    <input type="text" placeholder="add comment.." name="comment" >
+                                    <button  >Add Comment</button>
+                                </form>
+                            </div>
+                            <ul>
+                                <li th:each="comment:${answer.comments}" th:text="${comment.content}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="answer" th:if="! ${answer.isAccepted}" th:each="answer:${question.answers}">
+
+                    <div class="votes">
+                        <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
+                            <button>▲</button>
+                        </form>
+                        <span th:text="${answer.upvotes}-${answer.downvotes}"></span>
+                        <form th:action="@{/answers/downvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
+                            <button>▼</button>
+                        </form>
+                    </div>
+                    <div class="answer-body">
+                        <p th:utext="${answer.content}">
+                        </p>
+                        <br>
+
+
+                        <button th:if="${answer.isAccepted}" class="accepted">Accepted</button>
+                        <form th:if="${!answer.isAccepted && user != null && user.username == question.user.username && question.status != 'closed'}"
+
+                              th:action="'/questions/' + ${question.id} + '/accept-answer/' + ${answer.id}"
+                              method="post">
+                            <button type="submit">Accept</button>
+                        </form>
+
+
+
                         <p class="author">
                             Answered by <strong th:text="${answer.user.username}"></strong> 45 mins ago
                         </p>
