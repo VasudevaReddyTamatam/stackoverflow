@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.stackoverflow</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>stackoverflow</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>stackoverflow</name>
 	<description>Building StackOverflow clone</description>

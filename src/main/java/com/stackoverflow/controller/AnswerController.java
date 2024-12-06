@@ -1,5 +1,6 @@
 package com.stackoverflow.controller;
 
+import com.stackoverflow.constants.ActionPoints;
 import com.stackoverflow.model.Answer;
 import com.stackoverflow.model.Comment;
 import com.stackoverflow.model.Question;
@@ -83,19 +84,13 @@ public class AnswerController {
 
     @GetMapping("upvote/{questionId}/{id}")
     public String updateUpvote(@PathVariable("questionId") Long questionId,@PathVariable("id") Long id ){
-        Answer answer=answerService.findAnswerById(id);
-        Integer upvote=answer.getUpvotes()+1;
-        answer.setUpvotes(upvote);
-        answerService.updateAnswer(answer);
+        answerService.upvoteAnswer(id);
         return "redirect:/questions/" + questionId;
     }
 
     @GetMapping("downvote/{questionId}/{id}")
     public String updateDownvote(@PathVariable("questionId") Long questionId,@PathVariable("id") Long id){
-        Answer answer=answerService.findAnswerById(id);
-        Integer downvote=answer.getDownvotes()+1;
-        answer.setDownvotes(downvote);
-        answerService.updateAnswer(answer);
+        answerService.downvoteAnswer(id);
         return "redirect:/questions/" + questionId;
     }
 

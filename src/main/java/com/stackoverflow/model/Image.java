@@ -19,6 +19,7 @@ public class Image {
     private String type;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     private byte[] data;
 
 }
