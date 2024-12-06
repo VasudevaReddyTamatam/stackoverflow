@@ -97,7 +97,7 @@
                 <span><a  th:if="${user != null && user.username == question.user.username}" th:href="@{/questions/delete/{id}(id=${question.id})}">Delete</a></span>
 
                 <div class="comment" >
-                    <form  th:if="${user} != null" th:action="@{/questions/comment/{id}(id=${question.id})}" method="post">
+                    <form  th:if="${user != null && user.username != question.user.username} " th:action="@{/questions/comment/{id}(id=${question.id})}" method="post">
                         <input type="text" placeholder="add comment.." name="comment" >
                         <button  >Add Comment</button>
                     </form>
@@ -201,7 +201,7 @@
                 </article>
             </section>
             <div class="form-group">
-                <form th:if="${user} != null" th:action="@{/answers/save/{questionId}(questionId=${question.id})}" method="post">
+                <form th:if="${user != null && user.username != question.user.username}" th:action="@{/answers/save/{questionId}(questionId=${question.id})}" method="post">
                     <label for="body"><b>Add your Answer</b></label><br>
                     <textarea id="body" name="answer" rows="5" placeholder="Write your discussion here..."></textarea><br>
                     <input type="submit" value="Add answer" class="main-button">
