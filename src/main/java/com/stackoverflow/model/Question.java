@@ -31,12 +31,10 @@ public class Question {
     private String title;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description; // For rich-text content    , columnDefinition = "TEXT"
-
-//    @Column(name = "image_url")
-//    private String imageUrl; // URL or file path of the uploaded image
-
+    
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
