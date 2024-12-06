@@ -3,6 +3,7 @@ package com.stackoverflow.controller;
 import com.stackoverflow.dto.AnswerRequestDTO;
 import com.stackoverflow.dto.CommentRequestDTO;
 import com.stackoverflow.dto.QuestionRequestDTO;
+import com.stackoverflow.dto.UserLoginRequest;
 import com.stackoverflow.model.*;
 import com.stackoverflow.repository.TagRepository;
 import com.stackoverflow.service.CommentService;
@@ -58,6 +59,11 @@ public class QuestionController {
 
     @GetMapping("/ask")
     public String questionPage(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            model.addAttribute("loginRequest", new UserLoginRequest());
+            return "user/login";
+        }
         model.addAttribute("questionRequestDTO", new QuestionRequestDTO());
         return "question/create";
     }

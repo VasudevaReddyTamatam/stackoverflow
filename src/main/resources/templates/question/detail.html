@@ -93,11 +93,11 @@
                 </div>
             </div>
             <div class="question-footer">
-                <span><a th:href="@{/questions/edit/{id}(id=${question.id})}">Edit</a></span> |
-                <span><a th:href="@{/questions/delete/{id}(id=${question.id})}">Delete</a></span>
+                <span><a th:if="${user != null && user.username == question.user.username}" th:href="@{/questions/edit/{id}(id=${question.id})}">Edit | </a></span>
+                <span><a  th:if="${user != null && user.username == question.user.username}" th:href="@{/questions/delete/{id}(id=${question.id})}">Delete</a></span>
 
                 <div class="comment" >
-                    <form th:action="@{/questions/comment/{id}(id=${question.id})}" method="post">
+                    <form  th:if="${user} != null" th:action="@{/questions/comment/{id}(id=${question.id})}" method="post">
                         <input type="text" placeholder="add comment.." name="comment" >
                         <button  >Add Comment</button>
                     </form>
@@ -109,8 +109,9 @@
 
             <section class="answers" >
                 <h2 th:text="${#lists.size(question.answers)}+' Answers'"></h2>
-                <h3>Accepted Answer:</h3>
+
                 <article class="answer" th:if="${answer.isAccepted}" th:each="answer:${question.answers}">
+                    <h3>Accepted Answer:</h3>
 
                     <div class="votes">
                         <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
@@ -137,12 +138,12 @@
 
 
                         <p class="author">
-                            Answered by <strong th:text="${answer.user.username}"></strong> 45 mins ago
+                            Answered by <strong th:text="${answer.user.username}"></strong>
                         </p>
                         <div class="question-footer">
                             <!--                            <span>Edit</span> | <span>Delete</span>-->
                             <div class="comment" >
-                                <form th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
+                                <form th:if="${user} != null" th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
                                     <input type="text" placeholder="add comment.." name="comment" >
                                     <button  >Add Comment</button>
                                 </form>
@@ -182,12 +183,12 @@
 
 
                         <p class="author">
-                            Answered by <strong th:text="${answer.user.username}"></strong> 45 mins ago
+                            Answered by <strong th:text="${answer.user.username}"></strong>
                         </p>
                         <div class="question-footer">
                             <!--                            <span>Edit</span> | <span>Delete</span>-->
                             <div class="comment" >
-                                <form th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
+                                <form  th:if="${user} != null" th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
                                     <input type="text" placeholder="add comment.." name="comment" >
                                     <button  >Add Comment</button>
                                 </form>
@@ -200,7 +201,7 @@
                 </article>
             </section>
             <div class="form-group">
-                <form th:action="@{/answers/save/{questionId}(questionId=${question.id})}" method="post">
+                <form th:if="${user} != null" th:action="@{/answers/save/{questionId}(questionId=${question.id})}" method="post">
                     <label for="body"><b>Add your Answer</b></label><br>
                     <textarea id="body" name="answer" rows="5" placeholder="Write your discussion here..."></textarea><br>
                     <input type="submit" value="Add answer" class="main-button">
