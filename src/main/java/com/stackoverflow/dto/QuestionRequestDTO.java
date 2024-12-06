@@ -24,4 +24,5 @@ public class QuestionRequestDTO {
     private String description;
 
     private Set<String> tagsList;
+    private Long bounties;
 }

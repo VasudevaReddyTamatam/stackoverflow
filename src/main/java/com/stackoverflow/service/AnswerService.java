@@ -11,4 +11,6 @@ public interface AnswerService {
     void updateAnswer(Answer updatedAnswer);
     void deleteAnswerById(long id);
     List<Answer> findAllAnswers();
+    void upvoteAnswer(Long id);
+    void downvoteAnswer(Long id);
 }

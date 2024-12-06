@@ -1,5 +1,6 @@
 package com.stackoverflow.controller;
 
+import com.stackoverflow.constants.ActionPoints;
 import com.stackoverflow.dto.AnswerRequestDTO;
 import com.stackoverflow.dto.CommentRequestDTO;
 import com.stackoverflow.dto.QuestionRequestDTO;
@@ -58,7 +59,9 @@ public class QuestionController {
 
     @GetMapping("/ask")
     public String questionPage(Model model){
+        User user=userService.getLoggedInUser();
         model.addAttribute("questionRequestDTO", new QuestionRequestDTO());
+        model.addAttribute("user",user);
         return "question/create";
     }
 
@@ -87,19 +90,13 @@ public class QuestionController {
 
     @GetMapping("upvote/{id}")
     public String updateUpvote(@PathVariable("id") Long id){
-        Question question=questionService.getQuestionById(id);
-        Integer upvote=question.getUpvotes()+1;
-        question.setUpvotes(upvote);
-        questionService.updateQuestion(id,question);
+        questionService.upvoteQuestion(id);
         return "redirect:/questions/" + id;
     }
 
     @GetMapping("downvote/{id}")
     public String updateDownvote(@PathVariable("id") Long id){
-        Question question=questionService.getQuestionById(id);
-        Integer downvote=question.getDownvotes()+1;
-        question.setDownvotes(downvote);
-        questionService.updateQuestion(id,question);
+        questionService.downvoteQuestion(id);
         return "redirect:/questions/" + id;
     }
     @PostMapping("comment/{id}")

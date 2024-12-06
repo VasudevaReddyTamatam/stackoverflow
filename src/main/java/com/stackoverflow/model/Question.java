@@ -43,6 +43,7 @@ public class Question {
 
     private Integer upvotes = 0;
     private Integer downvotes = 0;
+    private Long bounties=0L;
 
     private String status = "open";
 
