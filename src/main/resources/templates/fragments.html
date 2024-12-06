@@ -16,9 +16,10 @@
         <div class="header-right">
             <div class="icons">
                 <span th:if="${user != null}">
-                <a th:href="@{/users/profile/{userId}(userId=${user.id})}" style="text-decoration: none; color: inherit;">
                     <span>🔔<strong>Notifications</strong></span>
-                    👤<strong th:text="${user.username}">User</strong>
+                <a th:href="@{/users/profile/{userId}(userId=${user.id})}" style="text-decoration: none; color: inherit;">
+<!--                    <span>🔔<strong>Notifications</strong></span>-->
+                    <span>👤<strong th:text="${user.username}">User</strong></span>
                 </a>
             </span>
                 <span th:if="${user == null}">

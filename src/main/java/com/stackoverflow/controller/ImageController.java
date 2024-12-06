@@ -22,7 +22,6 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
-
     @PostMapping("/image")
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
