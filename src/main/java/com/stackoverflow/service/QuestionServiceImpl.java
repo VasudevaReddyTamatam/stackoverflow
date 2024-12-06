@@ -11,6 +11,7 @@ import com.stackoverflow.repository.TagRepository;
 import com.stackoverflow.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -134,5 +135,13 @@ public class QuestionServiceImpl implements QuestionService{
         questionRepository.save(question);
         answerRepository.save(answer);
 
+    }
+
+    public List<Question> getAllQuestionsSortedByLatest() {
+        return questionRepository.findAll(Sort.by(Sort.Direction.DESC, "updatedAt"));
+    }
+
+    public List<Question> getAllQuestionsSortedByOldest() {
+        return questionRepository.findAll(Sort.by(Sort.Direction.ASC, "updatedAt"));
     }
 }
