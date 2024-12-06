@@ -9,59 +9,8 @@
     <!-- Load TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/gaau6m0a748v2n5gqlr64cznmvy5oqj7bav1d68jn1114pyz/tinymce/6/tinymce.min.js"
             referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: '#body', // The textarea ID
-            plugins: 'image link media table paste codesample',
-            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-                     'bullist numlist outdent indent | link image media codesample | removeformat',
-            image_title: true,
-            automatic_uploads: false, // Disable automatic uploads
-            file_picker_types: 'image',
-            // File picker callback for browsing files
-            file_picker_callback: function (callback, value, meta) {
-                // Create a file input element
-                var input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
-
-                // Trigger the file input when clicked
-                input.click();
-
-                // Handle the file selection
-                input.onchange = function () {
-                    var file = input.files[0];
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        // Send the file to the server using FormData
-                        var formData = new FormData();
-                        formData.append('file', file);
-
-                        // Upload the image to the server
-                        fetch('/uploads/image', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json()) // Parse JSON response
-                        .then(data => {
-                            console.log(data); // Log the response for debugging
-                            if (data.location) {
-                                callback(data.location); // Provide TinyMCE with the image URL
-                            } else {
-                                alert('Image upload failed');
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Error:', err); // Log the error
-                            alert('Error: ' + err.message); // Notify user on failure
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                };
-            }
-        });
-    </script>
+    <script src="/js/editor.js" defer></script>
+    <script src="/js/reputationCheck.js" defer></script>
 </head>
 <body>
 <main class="question-main">
@@ -73,7 +22,7 @@
 
     <section class="question-form-section">
         <form th:action="${(questionRequestDTO.id)== null ? '/questions/create' : '/questions/update/' + questionRequestDTO.id}"
-              method="post" th:object="${questionRequestDTO}">
+              method="post" th:object="${questionRequestDTO}" class="upvoteForm">
             <div class="input-title">
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title" th:field="*{title}" required
@@ -84,11 +33,16 @@
                 <label for="body">What are the details of your problem?</label>
                 <textarea id="body" name="description" th:field="*{description}" placeholder="Describe your question here"></textarea>
             </div>
-
+            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
             <div class="input-tags">
                 <label for="tags">Tags (comma-separated)</label>
                 <input type="text" id="tags" name="tagsList" th:field="*{tagsList}"
                        placeholder="e.g., java, spring, thymeleaf">
+            </div>
+            <div class="input-title" th:if="${questionRequestDTO.id}==null">
+                <label for="bounties">Bounties(optional)</label>
+                <input type="text" id="bounties" name="bounties" th:field="*{bounties}"
+                       placeholder="Enter bounties..." class="minReputationInput">
             </div>
             <button type="submit"
                     th:text="${questionRequestDTO.id == null ? 'Post Question' : 'Update Question'}">

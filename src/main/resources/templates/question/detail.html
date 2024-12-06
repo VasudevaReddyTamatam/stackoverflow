@@ -9,59 +9,8 @@
     <!-- Load TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/gaau6m0a748v2n5gqlr64cznmvy5oqj7bav1d68jn1114pyz/tinymce/6/tinymce.min.js"
             referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: '#body', // The textarea ID
-            plugins: 'image link media table paste codesample',
-            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-                     'bullist numlist outdent indent | link image media codesample | removeformat',
-            image_title: true,
-            automatic_uploads: false, // Disable automatic uploads
-            file_picker_types: 'image',
-            // File picker callback for browsing files
-            file_picker_callback: function (callback, value, meta) {
-                // Create a file input element
-                var input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
-
-                // Trigger the file input when clicked
-                input.click();
-
-                // Handle the file selection
-                input.onchange = function () {
-                    var file = input.files[0];
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        // Send the file to the server using FormData
-                        var formData = new FormData();
-                        formData.append('file', file);
-
-                        // Upload the image to the server
-                        fetch('/uploads/image', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json()) // Parse JSON response
-                        .then(data => {
-                            console.log(data); // Log the response for debugging
-                            if (data.location) {
-                                callback(data.location); // Provide TinyMCE with the image URL
-                            } else {
-                                alert('Image upload failed');
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Error:', err); // Log the error
-                            alert('Error: ' + err.message); // Notify user on failure
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                };
-            }
-        });
-    </script>
+    <script src="/js/editor.js" defer></script>
+    <script src="/js/reputationCheck.js" defer></script>
 
 </head>
 <body>
@@ -77,16 +26,21 @@
         <section class="posts">
             <div class="question-details">
                 <div class="votes">
-                    <form th:action="@{/questions/upvote/{id}(id=${question.id})}">
-                        <button>▲</button>
+
+                    <form th:action="@{/questions/upvote/{id}(id=${question.id})}" class="upvoteForm">
+                        <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                        <input type="hidden" class="minReputationInput" value="10">
+                        <button type="submit">▲</button>
                     </form>
                     <span th:text="${question.upvotes - question.downvotes}"></span>
-                    <form th:action="@{/questions/downvote/{id}(id=${question.id})}">
+                    <form th:action="@{/questions/downvote/{id}(id=${question.id})}" class="upvoteForm">
+                        <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                        <input type="hidden" class="minReputationInput" value="20">
                         <button>▼</button>
                     </form>
                 </div>
                 <div class="question-body">
-                    <div th:utext="${question.description}"></div> <!-- Display rich text content -->
+                    <div th:utext="${question.description}"></div>
                     <div class="tags">
                         <span th:each="tag : ${question.tags}" th:text="${tag.name}"></span>
                     </div>
@@ -97,7 +51,10 @@
                 <span><a  th:if="${user != null && user.username == question.user.username}" th:href="@{/questions/delete/{id}(id=${question.id})}">Delete</a></span>
 
                 <div class="comment" >
-                    <form  th:if="${user != null && user.username != question.user.username} " th:action="@{/questions/comment/{id}(id=${question.id})}" method="post">
+
+                    <form th:action="@{/questions/comment/{id}(id=${question.id})}" th:if="${user != null && user.username != question.user.username} " method="post" class="upvoteForm">
+                        <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                        <input type="hidden" class="minReputationInput" value="20">
                         <input type="text" placeholder="add comment.." name="comment" >
                         <button  >Add Comment</button>
                     </form>
@@ -114,11 +71,15 @@
                     <h3>Accepted Answer:</h3>
 
                     <div class="votes">
-                        <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
+                        <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" class="upvoteForm">
+                            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                            <input type="hidden" class="minReputationInput" value="10">
                             <button>▲</button>
                         </form>
                         <span th:text="${answer.upvotes}-${answer.downvotes}"></span>
-                        <form th:action="@{/answers/downvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
+                        <form th:action="@{/answers/downvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" class="upvoteForm">
+                            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                            <input type="hidden" class="minReputationInput" value="20">
                             <button>▼</button>
                         </form>
                     </div>
@@ -143,7 +104,9 @@
                         <div class="question-footer">
                             <!--                            <span>Edit</span> | <span>Delete</span>-->
                             <div class="comment" >
-                                <form th:if="${user} != null" th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
+                                <form th:if="${user} != null" th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post" class="upvoteForm">
+                                    <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                                    <input type="hidden" class="minReputationInput" value="20">
                                     <input type="text" placeholder="add comment.." name="comment" >
                                     <button  >Add Comment</button>
                                 </form>
@@ -158,11 +121,15 @@
                 <article class="answer" th:if="! ${answer.isAccepted}" th:each="answer:${question.answers}">
 
                     <div class="votes">
-                        <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
+                        <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" class="upvoteForm">
+                            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                            <input type="hidden" class="minReputationInput" value="10">
                             <button>▲</button>
                         </form>
                         <span th:text="${answer.upvotes}-${answer.downvotes}"></span>
-                        <form th:action="@{/answers/downvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
+                        <form th:action="@{/answers/downvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" class="upvoteForm">
+                            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                            <input type="hidden" class="minReputationInput" value="20">
                             <button>▼</button>
                         </form>
                     </div>
@@ -188,7 +155,9 @@
                         <div class="question-footer">
                             <!--                            <span>Edit</span> | <span>Delete</span>-->
                             <div class="comment" >
-                                <form  th:if="${user} != null" th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
+                                <form th:if="${user} != null" th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post" class="upvoteForm">
+                                    <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                                    <input type="hidden" class="minReputationInput" value="20">
                                     <input type="text" placeholder="add comment.." name="comment" >
                                     <button  >Add Comment</button>
                                 </form>
@@ -209,48 +178,6 @@
 
             </div>
 
-        </section>
-        <section class="answers" >
-            <h2 th:text="${#lists.size(question.answers)}+' Answers'"></h2>
-            <article class="answer" th:each="answer:${question.answers}">
-                <div class="votes">
-                    <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
-                        <button>▲</button>
-                    </form>
-                    <span th:text="${answer.upvotes}-${answer.downvotes}"></span>
-                    <form th:action="@{/answers/downvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}">
-                        <button>▼</button>
-                    </form>
-                </div>
-                <div class="answer-body">
-                    <p th:text="${answer.content}">
-                    </p>
-                    <br>
-                    <p class="author">
-                        Answered by <strong th:text="${answer.user.username}"></strong> 45 mins ago
-                    </p>
-                    <div class="question-footer">
-                        <!--                            <span>Edit</span> | <span>Delete</span>-->
-                        <div class="comment" >
-                            <form th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post">
-                                <input type="text" placeholder="add comment.." name="comment" >
-                                <button  >Add Comment</button>
-                            </form>
-                        </div>
-                        <ul>
-                            <li th:each="comment:${answer.comments}" th:text="${comment.content}"></li>
-                        </ul>
-                    </div>
-                </div>
-            </article>
-        </section>
-        <div class="form-group">
-            <form th:action="@{/answers/save/{questionId}(questionId=${question.id})}" method="post">
-                <label for="body"><b>Add your Answer</b></label><br>
-                <textarea id="body" name="answer" rows="5" placeholder="Write your discussion here..."></textarea><br>
-                <input type="submit" value="Add answer" class="main-button">
-            </form>
-        </div>
         </section>
 
     </main>

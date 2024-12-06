@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stack Overflow Dashboard</title>
     <link rel="stylesheet" href="/css/home.css">
+    <script src="/js/reputationCheck.js" defer></script>
 </head>
 <body>
 <div th:replace="fragments.html :: header"></div>
@@ -37,7 +38,9 @@
     </main>
 
     <aside class="widgets">
+        <form th:action="@{/questions/ask}" >
             <a th:href="@{/questions/ask}" class="main-button">Ask Questions</a>
+        </form>
     </aside>
 </div>
 <div th:replace="fragments.html :: footer"></div>
