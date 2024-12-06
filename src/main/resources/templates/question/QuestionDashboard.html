@@ -28,8 +28,8 @@
       <h2>Interesting Questions for you</h2>
       <div class="post" th:each="question:${questions}">
         <div class="votes">
-          <span>0 votes</span>
-          <span>0 answers</span>
+          <span th:text="${question.upvotes}+${question.downvotes}+' votes'"></span>
+          <span th:text="${#lists.size(question.answers)}+' answers'"></span>
         </div>
         <div class="content">
           <a th:href="@{/questions/{id}(id=${question.id})}" th:text="${question.title}">hi</a>
