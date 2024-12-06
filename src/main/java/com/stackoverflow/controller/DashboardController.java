@@ -49,7 +49,7 @@ public class DashboardController {
             User user = userService.getUserByEmail(email);
             model.addAttribute("user", user);
         }
-        List<Question> questionList=questionService.searchQuestionByText(text);
+        List<Question> questionList=questionService.getAllQuestions();
         model.addAttribute("questions",questionList);
         return "dashboard";
     }

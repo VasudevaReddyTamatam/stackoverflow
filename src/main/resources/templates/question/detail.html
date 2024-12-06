@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stack Overflow Dashboard</title>
     <link rel="stylesheet" href="/css/detail.css">
-
+    <script>
+        const user = /*[[${user}]]*/ null;
+    </script>
     <!-- Load TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/gaau6m0a748v2n5gqlr64cznmvy5oqj7bav1d68jn1114pyz/tinymce/6/tinymce.min.js"
             referrerpolicy="origin"></script>
@@ -28,13 +30,13 @@
                 <div class="votes">
 
                     <form th:action="@{/questions/upvote/{id}(id=${question.id})}" class="upvoteForm">
-                        <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                        <input type="hidden" class="reputationInput" value="/*[[${user?.reputation ?: 0}]]">
                         <input type="hidden" class="minReputationInput" value="10">
                         <button type="submit">▲</button>
                     </form>
                     <span th:text="${question.upvotes - question.downvotes}"></span>
                     <form th:action="@{/questions/downvote/{id}(id=${question.id})}" class="upvoteForm">
-                        <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                        <input type="hidden" class="reputationInput" value="/*[[${user?.reputation ?: 0}]]">
                         <input type="hidden" class="minReputationInput" value="20">
                         <button>▼</button>
                     </form>
@@ -53,7 +55,7 @@
                 <div class="comment" >
 
                     <form th:action="@{/questions/comment/{id}(id=${question.id})}" th:if="${user != null && user.username != question.user.username} " method="post" class="upvoteForm">
-                        <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                        <input type="hidden" class="reputationInput" value="/*[[${user?.reputation ?: 0}]]">
                         <input type="hidden" class="minReputationInput" value="20">
                         <input type="text" placeholder="add comment.." name="comment" >
                         <button  >Add Comment</button>
@@ -72,13 +74,13 @@
 
                     <div class="votes">
                         <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" class="upvoteForm">
-                            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                            <input type="hidden" class="reputationInput" value="/*[[${user?.reputation ?: 0}]]">
                             <input type="hidden" class="minReputationInput" value="10">
                             <button>▲</button>
                         </form>
                         <span th:text="${answer.upvotes}-${answer.downvotes}"></span>
                         <form th:action="@{/answers/downvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" class="upvoteForm">
-                            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                            <input type="hidden" class="reputationInput" value="/*[[${user?.reputation ?: 0}]]">
                             <input type="hidden" class="minReputationInput" value="20">
                             <button>▼</button>
                         </form>
@@ -105,7 +107,7 @@
                             <!--                            <span>Edit</span> | <span>Delete</span>-->
                             <div class="comment" >
                                 <form th:if="${user} != null" th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post" class="upvoteForm">
-                                    <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                                    <input type="hidden" class="reputationInput"  value="/*[[${user?.reputation ?: 0}]]">
                                     <input type="hidden" class="minReputationInput" value="20">
                                     <input type="text" placeholder="add comment.." name="comment" >
                                     <button  >Add Comment</button>
@@ -122,13 +124,13 @@
 
                     <div class="votes">
                         <form th:action="@{/answers/upvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" class="upvoteForm">
-                            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                            <input type="hidden" class="reputationInput"  value="/*[[${user?.reputation ?: 0}]]">
                             <input type="hidden" class="minReputationInput" value="10">
                             <button>▲</button>
                         </form>
                         <span th:text="${answer.upvotes}-${answer.downvotes}"></span>
                         <form th:action="@{/answers/downvote/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" class="upvoteForm">
-                            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                            <input type="hidden" class="reputationInput"  value="/*[[${user?.reputation ?: 0}]]">
                             <input type="hidden" class="minReputationInput" value="20">
                             <button>▼</button>
                         </form>
@@ -156,7 +158,7 @@
                             <!--                            <span>Edit</span> | <span>Delete</span>-->
                             <div class="comment" >
                                 <form th:if="${user} != null" th:action="@{/answers/comment/{questionId}/{id}(questionId=${question.id},id=${answer.id})}" method="post" class="upvoteForm">
-                                    <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+                                    <input type="hidden" class="reputationInput"  value="/*[[${user?.reputation ?: 0}]]">
                                     <input type="hidden" class="minReputationInput" value="20">
                                     <input type="text" placeholder="add comment.." name="comment" >
                                     <button  >Add Comment</button>
