@@ -13,4 +13,6 @@ public interface QuestionService {
     void updateQuestionWithDTO(Long id, QuestionRequestDTO questionRequestDTO);
     void deleteQuestion(Long id);
     void acceptAnswer(Long questionId,Long answerId);
+    List<Question> getAllQuestionsSortedByLatest();
+    List<Question> getAllQuestionsSortedByOldest();
 }

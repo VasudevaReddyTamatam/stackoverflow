@@ -5,6 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Question Dashboard</title>
   <link rel="stylesheet" href="/css/question.css">
+  <style>
+    .text-content .actions {
+       display: flex;
+       align-items: center;
+       gap: 10px; /* Space between elements */
+       margin-top: 10px;
+   }
+
+   .text-content .actions form {
+       display: inline-block;
+   }
+
+   .text-content .actions select {
+       padding: 5px;
+       font-size: 14px;
+   }
+
+   .text-content .actions .main-button {
+       padding: 10px 20px;
+       background-color: #b2dfec; /* Light blue */
+       border: none;
+       border-radius: 5px;
+       cursor: pointer;
+       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+       transition: all 0.3s ease;
+   }
+
+   .text-content .actions .main-button:hover {
+       background-color: #9ad0e5; /* Slightly darker blue on hover */
+   }
+
+   .text-content .actions .main-button .main-button-link {
+       text-decoration: none;
+       color: #333; /* Original text color */
+       font-weight: bold;
+   }
+  </style>
 </head>
 <body>
 <div th:replace="fragments.html :: header"></div>
@@ -14,15 +51,22 @@
 
     <div class="text-content">
       <h1>Questions</h1>
-      <select>
-        <option>sort</option>
-        <option>latest</option>
-        <option>old</option>
-      </select>
-      <select>
-        <option>filter</option>
-      </select>
-      <button class="main-button"><a th:href="@{/questions/ask}" class="main-button">Ask Questions</a></button>
+      <div class="actions">
+        <form method="get" th:action="@{/questions}">
+          <label for="sort">Sort by:</label>
+          <select name="sortBy" id="sort" onchange="this.form.submit()">
+            <option value="latest" th:selected="${sortBy == 'latest'}">Latest</option>
+            <option value="oldest" th:selected="${sortBy == 'oldest'}">Oldest</option>
+          </select>
+        </form>
+
+        <select>
+          <option>Filter</option>
+        </select>
+        <button class="main-button">
+          <a th:href="@{/questions/ask}" class="main-button-link">Ask Questions</a>
+        </button>
+      </div>
     </div>
     <section class="posts">
       <h2>Interesting Questions for you</h2>

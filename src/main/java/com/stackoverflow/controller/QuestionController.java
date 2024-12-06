@@ -39,16 +39,43 @@ public class QuestionController {
         this.tagRepository = tagRepository;
     }
 
+//    @GetMapping
+//    public String questionDashboard(Model model){
+//        List<Question> questionList=questionService.getAllQuestions();
+//        model.addAttribute("questions",questionList);
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+//            model.addAttribute("user", null);
+//        }
+//        else {
+//            String email = authentication.getName();
+//            User user = userService.getUserByEmail(email);
+//            model.addAttribute("user", user);
+//        }
+//
+//        return "question/QuestionDashboard";
+//    }
+
     @GetMapping
-    public String questionDashboard(Model model){
-        List<Question> questionList=questionService.getAllQuestions();
-        model.addAttribute("questions",questionList);
+    public String questionDashboard(
+            @RequestParam(defaultValue = "latest") String sortBy,
+            Model model) {
+
+        List<Question> questionList;
+        if ("oldest".equalsIgnoreCase(sortBy)) {
+            questionList = questionService.getAllQuestionsSortedByOldest();
+        } else {
+            questionList = questionService.getAllQuestionsSortedByLatest();
+        }
+
+        model.addAttribute("questions", questionList);
+        model.addAttribute("sortBy", sortBy);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
             model.addAttribute("user", null);
-        }
-        else {
+        } else {
             String email = authentication.getName();
             User user = userService.getUserByEmail(email);
             model.addAttribute("user", user);
