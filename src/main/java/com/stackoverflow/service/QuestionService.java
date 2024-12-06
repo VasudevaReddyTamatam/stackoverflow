@@ -15,5 +15,6 @@ public interface QuestionService {
     void upvoteQuestion(Long id);
     void downvoteQuestion(Long id);
     void acceptAnswer(Long questionId,Long answerId);
-    List<Question> searchQuestionByText(String text);
+    List<Question> getAllQuestionsSortedByLatest();
+    List<Question> getAllQuestionsSortedByOldest();
 }
