@@ -13,4 +13,6 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     Page<Question> findAllByOrderByUpdatedAtDesc(Pageable pageable);
 
     Page<Question> findAllByOrderByUpdatedAtAsc(Pageable pageable);
+
+    List<Question> findByTitleContainingIgnoreCase(String keyword);
 }

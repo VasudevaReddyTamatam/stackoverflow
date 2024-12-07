@@ -1,6 +1,7 @@
 package com.stackoverflow.controller;
 
 import com.stackoverflow.constants.ActionPoints;
+import com.stackoverflow.dto.UserLoginRequest;
 import com.stackoverflow.model.Answer;
 import com.stackoverflow.model.Comment;
 import com.stackoverflow.model.Question;
@@ -9,6 +10,8 @@ import com.stackoverflow.service.CommentService;
 import com.stackoverflow.service.QuestionService;
 import com.stackoverflow.service.UserService;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -83,13 +86,23 @@ public class AnswerController {
     }
 
     @GetMapping("upvote/{questionId}/{id}")
-    public String updateUpvote(@PathVariable("questionId") Long questionId,@PathVariable("id") Long id ){
+    public String updateUpvote(@PathVariable("questionId") Long questionId,@PathVariable("id") Long id ,Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            model.addAttribute("loginRequest", new UserLoginRequest());
+            return "user/login";
+        }
         answerService.upvoteAnswer(id);
         return "redirect:/questions/" + questionId;
     }
 
     @GetMapping("downvote/{questionId}/{id}")
-    public String updateDownvote(@PathVariable("questionId") Long questionId,@PathVariable("id") Long id){
+    public String updateDownvote(@PathVariable("questionId") Long questionId,@PathVariable("id") Long id,Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            model.addAttribute("loginRequest", new UserLoginRequest());
+            return "user/login";
+        }
         answerService.downvoteAnswer(id);
         return "redirect:/questions/" + questionId;
     }

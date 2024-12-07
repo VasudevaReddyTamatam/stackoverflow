@@ -1,21 +1,21 @@
 package com.stackoverflow.constants;
 
 public enum ActionPoints {
-    UPVOTE_QUESTION(5),
-    UPVOTE_ANSWER(10),
-    DOWNVOTE_AUTHOR(2),
-    DOWNVOTE_USER(1),
-    QUESTION_ASKER(2),
-    ACCEPTED_ANSWER(15);
+    UPVOTE_QUESTION(5L),
+    UPVOTE_ANSWER(10L),
+    DOWNVOTE_AUTHOR(2L),
+    DOWNVOTE_USER(1L),
+    QUESTION_ASKER(2L),
+    ACCEPTED_ANSWER(15L);
 
-    private final int points;
+    private final Long points;
 
 
-    ActionPoints(int points) {
+    ActionPoints(Long points) {
         this.points = points;
     }
 
-    public int getPoints() {
+    public Long getPoints() {
         return points;
     }
 }

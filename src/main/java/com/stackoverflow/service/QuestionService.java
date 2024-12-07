@@ -17,4 +17,5 @@ public interface QuestionService {
     void acceptAnswer(Long questionId,Long answerId);
     List<Question> getAllQuestionsSortedByLatest();
     List<Question> getAllQuestionsSortedByOldest();
+    List<Question> searchQuestionsByTitle(String keyword);
 }

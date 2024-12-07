@@ -12,14 +12,14 @@
                 <h1>Stack Overflow</h1>
             </nav>
         </div>
-        <form th:action="@{/search}" >
-        <input type="text" name="text" placeholder="Search..." class="search-bar">
+        <form th:action="@{questions/search}" >
+        <input type="text" name="keyword" placeholder="Search..." class="search-bar">
         </form>
         <div class="header-right">
             <div class="icons">
                 <span th:if="${user != null}">
-                <a th:href="@{/users/profile/{userId}(userId=${user.id})}" style="text-decoration: none; color: inherit;">
                     <span>🔔<strong>Notifications</strong></span>
+                <a th:href="@{/users/profile/{userId}(userId=${user.id})}" style="text-decoration: none; color: inherit;">
                     👤<strong th:text="${user.username}">User</strong>
                 </a>
             </span>
