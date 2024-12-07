@@ -29,7 +29,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private Long reputation= 10L;
+    private Long reputation= 5L;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")

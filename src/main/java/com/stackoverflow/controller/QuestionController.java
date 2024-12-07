@@ -110,25 +110,38 @@ public class QuestionController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
             model.addAttribute("user", null);
+            model.addAttribute("reputation",0);
         }
         else {
             String email = authentication.getName();
             User user = userService.getUserByEmail(email);
             model.addAttribute("user", user);
+            model.addAttribute("reputation",user.getReputation());
         }
         Question question = questionService.getQuestionById(questionId);
         model.addAttribute("question", question);
+
         return "question/detail";
     }
 
     @GetMapping("upvote/{id}")
-    public String updateUpvote(@PathVariable("id") Long id){
+    public String updateUpvote(@PathVariable("id") Long id,Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            model.addAttribute("loginRequest", new UserLoginRequest());
+            return "user/login";
+        }
         questionService.upvoteQuestion(id);
         return "redirect:/questions/" + id;
     }
 
     @GetMapping("downvote/{id}")
-    public String updateDownvote(@PathVariable("id") Long id){
+    public String updateDownvote(@PathVariable("id") Long id, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            model.addAttribute("loginRequest", new UserLoginRequest());
+            return "user/login";
+        }
         questionService.downvoteQuestion(id);
         return "redirect:/questions/" + id;
     }

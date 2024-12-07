@@ -33,7 +33,7 @@
                 <label for="body">What are the details of your problem?</label>
                 <textarea id="body" name="description" th:field="*{description}" placeholder="Describe your question here"></textarea>
             </div>
-            <input type="hidden" class="reputationInput" th:value="${user.reputation}">
+            <input type="hidden" class="reputationInput" value="/*[[${user?.reputation ?: 0}]]">
             <div class="input-tags">
                 <label for="tags">Tags (comma-separated)</label>
                 <input type="text" id="tags" name="tagsList" th:field="*{tagsList}"
