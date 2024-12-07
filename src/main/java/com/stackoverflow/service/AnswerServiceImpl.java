@@ -70,9 +70,6 @@ public class AnswerServiceImpl implements AnswerService {
     public void upvoteAnswer(Long id) {
         Answer answer= answerRepository.findById(id).get();
 
-        Long reputaionPoints=answer.getUser().getReputation()+ ActionPoints.UPVOTE_ANSWER.getPoints();
-        answer.getUser().setReputation(reputaionPoints);
-
         votingService.saveVoteForAnswer(true,false,answer);
         answerRepository.save(answer);
     }
@@ -83,13 +80,6 @@ public class AnswerServiceImpl implements AnswerService {
         User user=userService.getUserByEmail(authentication.getName());
         Answer answer=answerRepository.findById(id).get();
 
-        Long reputationPointsForAuthor=answer.getUser().getReputation()- ActionPoints.DOWNVOTE_AUTHOR.getPoints();
-        Long reputationPointsForUser=user.getReputation()-ActionPoints.DOWNVOTE_USER.getPoints();
-
-        answer.getUser().setReputation(reputationPointsForAuthor);
-        user.setReputation(reputationPointsForUser);
-
-        userService.saveUser(user);
         votingService.saveVoteForAnswer(false,true,answer);
         answerRepository.save(answer);
     }

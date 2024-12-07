@@ -1,8 +1,5 @@
 package com.stackoverflow.controller;
 
-import com.stackoverflow.constants.ActionPoints;
-import com.stackoverflow.dto.AnswerRequestDTO;
-import com.stackoverflow.dto.CommentRequestDTO;
 import com.stackoverflow.dto.QuestionRequestDTO;
 import com.stackoverflow.dto.UserLoginRequest;
 import com.stackoverflow.model.*;
@@ -18,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -111,12 +107,14 @@ public class QuestionController {
         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
             model.addAttribute("user", null);
             model.addAttribute("reputation",0);
+            model.addAttribute("username","");
         }
         else {
             String email = authentication.getName();
             User user = userService.getUserByEmail(email);
             model.addAttribute("user", user);
             model.addAttribute("reputation",user.getReputation());
+            model.addAttribute("username",user.getUsername());
         }
         Question question = questionService.getQuestionById(questionId);
         model.addAttribute("question", question);
@@ -136,7 +134,7 @@ public class QuestionController {
     }
 
     @GetMapping("downvote/{id}")
-    public String updateDownvote(@PathVariable("id") Long id, Model model){
+    public String updateDownvote(@PathVariable("id") Long id,Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
             model.addAttribute("loginRequest", new UserLoginRequest());
@@ -194,5 +192,22 @@ public class QuestionController {
 
         questionService.acceptAnswer(questionId, answerId);
         return "redirect:/questions/" + questionId;
+    }
+
+    @GetMapping("/search")
+    public String searchQuestions(@RequestParam("keyword") String keyword, Model model) {
+        List<Question> questions = questionService.searchQuestionsByTitle(keyword);
+
+        model.addAttribute("questions", questions);
+        model.addAttribute("keyword", keyword);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            model.addAttribute("user", null);
+        } else {
+            String email = authentication.getName();
+            User user = userService.getUserByEmail(email);
+            model.addAttribute("user", user);
+        }
+        return "dashboard";
     }
 }

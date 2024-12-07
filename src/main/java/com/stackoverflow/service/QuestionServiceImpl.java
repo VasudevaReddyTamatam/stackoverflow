@@ -90,8 +90,6 @@ public class QuestionServiceImpl implements QuestionService{
         Question question= questionRepository.findById(id).get();
         votingService.saveVoteForQuestion(true,false,question);
 
-        Long reputaionPoints=question.getUser().getReputation()+ ActionPoints.UPVOTE_QUESTION.getPoints();
-        question.getUser().setReputation(reputaionPoints);
 
         questionRepository.save(question);
     }
@@ -102,14 +100,8 @@ public class QuestionServiceImpl implements QuestionService{
         User user=userService.getUserByEmail(authentication.getName());
         Question question= questionRepository.findById(id).get();
 
-        Long reputationPointsForAuthor=question.getUser().getReputation()-ActionPoints.DOWNVOTE_AUTHOR.getPoints();
-        Long reputationPointsForUser=user.getReputation()-ActionPoints.DOWNVOTE_USER.getPoints();
-
-        user.setReputation(reputationPointsForUser);
-        question.getUser().setReputation(reputationPointsForAuthor);
-
-        userService.saveUser(user);
-        questionRepository.save(question);
+//        userService.saveUser(user);
+//        questionRepository.save(question);
 
         question=votingService.saveVoteForQuestion(false,true,question);
         questionRepository.save(question);
@@ -172,5 +164,13 @@ public class QuestionServiceImpl implements QuestionService{
 
     public List<Question> getAllQuestionsSortedByOldest() {
         return questionRepository.findAll(Sort.by(Sort.Direction.ASC, "updatedAt"));
+    }
+
+    @Override
+    public List<Question> searchQuestionsByTitle(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Search keyword cannot be null or empty");
+        }
+        return questionRepository.findByTitleContainingIgnoreCase(keyword);
     }
 }
